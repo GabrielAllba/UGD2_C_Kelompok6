@@ -73,7 +73,7 @@ class DetailTipeKamar extends StatelessWidget {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        if (index != 2) {
+                        if (index != tipeKamar.foto.length - 1) {
                           return GridTile(
                             child: InkWell(
                               onTap: () {
@@ -150,7 +150,7 @@ class DetailTipeKamar extends StatelessWidget {
                           );
                         }
                       },
-                      childCount: 3,
+                      childCount: tipeKamar.foto.length,
                     ),
                   ),
                 ],

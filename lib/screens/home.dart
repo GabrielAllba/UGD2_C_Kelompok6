@@ -42,6 +42,12 @@ class HomeScreenState extends State<HomeScreen> {
       initialDate: currentDate,
       firstDate: currentDate,
       lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {
@@ -66,6 +72,12 @@ class HomeScreenState extends State<HomeScreen> {
       initialDate: tomorrow,
       firstDate: tomorrow,
       lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {
@@ -98,7 +110,16 @@ class HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  color: Colors.black.withOpacity(0.6),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(235, 42, 124, 255),
+                        Color.fromARGB(235, 64, 223, 238),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
                   padding: const EdgeInsets.all(16.0),
                   child: const Column(
                     mainAxisAlignment: MainAxisAlignment.end,

@@ -77,7 +77,13 @@ const tipeKamar = [
       FiturTambahan(id: '1', nama: 'Shower', icon: Icons.shower_outlined),
       FiturTambahan(id: '2', nama: 'Bangku', icon: Icons.chair_alt_outlined),
     ],
-    foto: [],
+    foto: [
+      'images/thumbnail.jpg',
+      'images/thumbnail-2.jpg',
+      'images/thumbnail-3.jpg',
+      'images/thumbnail-4.jpg',
+      'images/thumbnail-5.jpg',
+    ],
     luasRuangan: 25.5,
     ruangTamu: 2,
     tipeBed: '3 King Bed',
@@ -85,7 +91,7 @@ const tipeKamar = [
   TipeKamar(
       id: '3',
       nama: 'Super Deluxe',
-      thumbnail: 'images/background.jpg',
+      thumbnail: 'images/thumbnail-3.jpg',
       harga: 650000,
       kapasitas: 30,
       fasilitasUtamaKamar: [
@@ -113,7 +119,13 @@ const tipeKamar = [
         FiturTambahan(id: '1', nama: 'Shower', icon: Icons.shower_outlined),
         FiturTambahan(id: '2', nama: 'Bangku', icon: Icons.chair_alt_outlined),
       ],
-      foto: [],
+      foto: [
+        'images/thumbnail.jpg',
+        'images/thumbnail-2.jpg',
+        'images/thumbnail-3.jpg',
+        'images/thumbnail-4.jpg',
+        'images/thumbnail-5.jpg',
+      ],
       luasRuangan: 25.5,
       ruangTamu: 2,
       tipeBed: '3 King Bed',
@@ -122,7 +134,7 @@ const tipeKamar = [
   TipeKamar(
       id: '4',
       nama: 'Rich Deluxe',
-      thumbnail: 'images/background.jpg',
+      thumbnail: 'images/thumbnail-4.jpg',
       harga: 750000,
       kapasitas: 5,
       fasilitasUtamaKamar: [
@@ -150,7 +162,13 @@ const tipeKamar = [
         FiturTambahan(id: '1', nama: 'Shower', icon: Icons.shower_outlined),
         FiturTambahan(id: '2', nama: 'Bangku', icon: Icons.chair_alt_outlined),
       ],
-      foto: [],
+      foto: [
+        'images/thumbnail.jpg',
+        'images/thumbnail-2.jpg',
+        'images/thumbnail-3.jpg',
+        'images/thumbnail-4.jpg',
+        'images/thumbnail-5.jpg',
+      ],
       luasRuangan: 25.5,
       ruangTamu: 2,
       tipeBed: '3 King Bed',
@@ -159,7 +177,7 @@ const tipeKamar = [
   TipeKamar(
     id: '5',
     nama: 'Super Rich Deluxe',
-    thumbnail: 'images/background.jpg',
+    thumbnail: 'images/thumbnail-5.jpg',
     harga: 850000,
     kapasitas: 15,
     fasilitasUtamaKamar: [
@@ -187,7 +205,13 @@ const tipeKamar = [
       FiturTambahan(id: '1', nama: 'Shower', icon: Icons.shower_outlined),
       FiturTambahan(id: '2', nama: 'Bangku', icon: Icons.chair_alt_outlined),
     ],
-    foto: [],
+    foto: [
+      'images/thumbnail.jpg',
+      'images/thumbnail-2.jpg',
+      'images/thumbnail-3.jpg',
+      'images/thumbnail-4.jpg',
+      'images/thumbnail-5.jpg',
+    ],
     luasRuangan: 25.5,
     ruangTamu: 2,
     tipeBed: '3 King Bed',
