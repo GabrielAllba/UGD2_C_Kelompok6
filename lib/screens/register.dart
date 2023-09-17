@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 
+
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -14,6 +15,16 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
+  DateTime _dateTime = DateTime.now();
+
+  void _showDatePicker(){
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +84,7 @@ class _RegisterViewState extends State<RegisterView> {
                   controller: notelpController,
                   hintTxt: "No Telp",
                   helperTxt: "082123456789",
-                  iconData: Icons.phone_android),
+                  iconData: Icons.phone_android),              
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
