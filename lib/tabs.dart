@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ugd2_c_kelompok6/home.dart';
+import 'package:ugd2_c_kelompok6/screens/home.dart';
+import 'package:ugd2_c_kelompok6/screens/profile_kelompok.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -23,6 +24,8 @@ class _TabsScreenState extends State<TabsScreen> {
 
     if (_selectedPageIndex == 0) {
       activePage = const HomeScreen();
+    } else if (_selectedPageIndex == 2) {
+      activePage = const ProfileKelompok();
     }
 
     return Scaffold(
@@ -41,7 +44,7 @@ class _TabsScreenState extends State<TabsScreen> {
             label: 'My Booking',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_outlined),
+            icon: Icon(Icons.group_add_outlined),
             label: 'Profile',
           ),
         ],

@@ -14,6 +14,7 @@ class TipeKamar {
     this.fasilitasUtamaKamar = const [],
     this.fasilitasKamar = const [],
     this.fiturTambahan = const [],
+    this.deskripsi = 'Tidak Ada Deskripsi',
   });
 
   final String id;
@@ -28,37 +29,42 @@ class TipeKamar {
   final List<FasilitasUtamaKamar> fasilitasUtamaKamar;
   final List<FasilitasKamar> fasilitasKamar;
   final List<FiturTambahan> fiturTambahan;
+  final String deskripsi;
 }
 
-class FasilitasUtamaKamar {
+abstract class Fasilitas {
+  final String id;
+  final String nama;
+  final IconData icon;
+
+  const Fasilitas({
+    required this.id,
+    required this.nama,
+    required this.icon,
+  });
+}
+
+// Extend the base class for specific classes
+class FasilitasUtamaKamar extends Fasilitas {
   const FasilitasUtamaKamar({
-    required this.id,
-    required this.nama,
-    required this.icon,
-  });
-
-  final String id;
-  final String nama;
-  final IconData icon;
+    required String id,
+    required String nama,
+    IconData icon = Icons.star_border_outlined,
+  }) : super(id: id, nama: nama, icon: icon);
 }
 
-class FasilitasKamar {
+class FasilitasKamar extends Fasilitas {
   const FasilitasKamar({
-    required this.id,
-    required this.nama,
-  });
-
-  final String id;
-  final String nama;
+    required String id,
+    required String nama,
+    IconData icon = Icons.star_border_outlined,
+  }) : super(id: id, nama: nama, icon: icon);
 }
 
-class FiturTambahan {
+class FiturTambahan extends Fasilitas {
   const FiturTambahan({
-    required this.id,
-    required this.nama,
-    required this.icon,
-  });
-  final String id;
-  final String nama;
-  final IconData icon;
+    required String id,
+    required String nama,
+    IconData icon = Icons.star_border_outlined,
+  }) : super(id: id, nama: nama, icon: icon);
 }
