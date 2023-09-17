@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ugd2_c_kelompok6/screens/profile_item.dart';
+import 'package:ugd2_c_kelompok6/data/kelompok.dart';
 
 class ProfileKelompok extends StatelessWidget {
   const ProfileKelompok({super.key});
@@ -7,24 +9,28 @@ class ProfileKelompok extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 3,
+        length: kelompok.length,
         child: Scaffold(
           appBar: AppBar(
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
-              ],
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            bottom: TabBar(
+              tabs: kelompok.map((person) {
+                return Tab(
+                  icon: Icon(
+                    person.gender == 'L'
+                        ? Icons.man_2_outlined
+                        : Icons.woman_2_outlined,
+                  ),
+                  text: person.panggilan,
+                );
+              }).toList(),
             ),
-            title: const Text('Tabs Demo'),
+            title: const Text('Profile Kelompok'),
           ),
-          body: const TabBarView(
-            children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
-            ],
+          body: TabBarView(
+            children: kelompok.map((person) {
+              return ProfileItem(orang: person);
+            }).toList(),
           ),
         ),
       ),
