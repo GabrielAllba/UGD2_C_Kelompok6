@@ -11,10 +11,10 @@ Padding inputForm(
   Function()? onTap,
 }) {
   return Padding(
-    padding: const EdgeInsets.all(16),
+    padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
     child: isDate == false
         ? SizedBox(
-            width: 350,
+            width: double.infinity,
             child: TextFormField(
               onTap: onTap,
               validator: (value) => validasi(value),
@@ -31,7 +31,7 @@ Padding inputForm(
             ),
           )
         : SizedBox(
-            width: 350,
+            width: double.infinity,
             child: TextField(
               controller: controller,
               decoration: InputDecoration(

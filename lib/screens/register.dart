@@ -100,6 +100,7 @@ class _RegisterViewState extends State<RegisterView> {
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   height: 96,
