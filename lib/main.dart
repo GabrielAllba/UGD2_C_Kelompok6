@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
-import 'package:ugd2_c_kelompok6/screens/register.dart';
-import 'package:ugd2_c_kelompok6/tabs.dart';
 
 void main() {
   runApp(const MainApp());

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
-import 'package:ugd2_c_kelompok6/screens/home.dart';
 import 'package:ugd2_c_kelompok6/screens/register.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 
