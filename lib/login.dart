@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:ugd2_c_kelompok6/screens/register.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -80,11 +81,23 @@ class _LoginView extends State<LoginView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         if (dataForm != null &&
                             dataForm['username'] == usernameController.text &&
                             dataForm['password'] == passwordController.text) {
+                          Fluttertoast.showToast(
+                            msg: "Berhasil Login",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.blue,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+
+                          await Future.delayed(Duration(seconds: 2));
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
