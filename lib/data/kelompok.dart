@@ -15,7 +15,7 @@ const kelompok = [
     npm: 210711288,
     tahunMasuk: 2021,
     hobi: [
-      Hobi(id: '1', nama: 'Berenang', icon: Icons.water_damage_outlined),
+      Hobi(id: '1', nama: 'Balapan', icon: Icons.motorcycle_outlined),
       Hobi(id: '2', nama: 'Ngoding', icon: Icons.code_outlined),
       Hobi(id: '3', nama: 'Bernyanyi', icon: Icons.mic_outlined),
       Hobi(id: '4', nama: 'Menari', icon: Icons.slow_motion_video_outlined),
@@ -45,10 +45,10 @@ const kelompok = [
   Orang(
     id: '3',
     profile: 'images/jennie.jpg',
-    nama: 'Prihatinny Jeannie',
-    panggilan: 'Jennie',
+    nama: 'Prihatinny Jennia',
+    panggilan: 'Jennia',
     gender: 'P',
-    email: 'jeannie@gmail.com',
+    email: 'jennia@gmail.com',
     umur: 20,
     universitas: 'UAJY',
     programStudi: 'Informatika',

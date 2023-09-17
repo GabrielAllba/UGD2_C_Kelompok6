@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:ugd2_c_kelompok6/screens/home.dart';
 import 'package:ugd2_c_kelompok6/screens/register.dart';
+import 'package:ugd2_c_kelompok6/tabs.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -16,6 +17,7 @@ class _LoginView extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   bool isPasswordVisible = false;
 
   @override
@@ -39,33 +41,39 @@ class _LoginView extends State<LoginView> {
                   helperTxt: "Inputkan User yang telah didaftar",
                   iconData: Icons.person),
               //* Password
-              TextFormField(
-                controller: passwordController,
-                obscureText:
-                    !isPasswordVisible, // Ini mengontrol apakah password tersembunyi atau tidak
-                validator: (p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return "password kosong";
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  labelText: "Password",
-                  helperText: "Inputkan Password",
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isPasswordVisible = !isPasswordVisible;
-                      });
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                    controller: passwordController,
+                    obscureText: !isPasswordVisible,
+                    validator: (p0) {
+                      if (p0 == null || p0.isEmpty) {
+                        return "password kosong";
+                      }
+                      return null;
                     },
-                    child: Icon(
-                      isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: "Password",
+                      labelText: "Password",
+                      helperText: "Inputkan Password",
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                      prefixIcon: const Icon(Icons.password),
                     ),
                   ),
-                  icon: Icon(Icons.password),
                 ),
               ),
 
@@ -81,13 +89,16 @@ class _LoginView extends State<LoginView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
+                              builder: (_) => const TabsScreen(),
                             ),
                           );
                         } else {
                           showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                               title: const Text('Passwrrrord Salah'),
                               content: TextButton(
                                 onPressed: () => pushRegister(context),
