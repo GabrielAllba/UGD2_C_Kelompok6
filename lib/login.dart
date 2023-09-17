@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
+import 'package:ugd2_c_kelompok6/screens/home.dart';
+import 'package:ugd2_c_kelompok6/screens/register.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -79,7 +81,7 @@ class _LoginView extends State<LoginView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const HomeView(),
+                              builder: (_) => const HomeScreen(),
                             ),
                           );
                         } else {
