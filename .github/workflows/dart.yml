@@ -1,10 +1,6 @@
 name: Dart
-on:
-    push:
-        branches: [$default-branch]
-    pull_request:
-        branches: [$default-branch]
-
+run-name: ${{ github.actor }} is Running Dart Workflow
+on: [push]
 jobs:
     build:
         runs-on: ubuntu-latest
