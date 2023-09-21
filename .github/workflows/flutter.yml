@@ -1,0 +1,33 @@
+name: Flutter Build and Test
+run-name: ${{github.actor}} is Running Flutter Build and Test
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Set up Flutter
+              uses: subosito/flutter-action@v9
+              with:
+                  flutter-version: '3.13.4'
+
+            - name: Install dependencies
+              run: flutter pub get
+
+            - name: Build and test Flutter app
+              run: |
+                  flutter test
+                  flutter build apk --release
+
+            - name: Upload build artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: build
+                  path: build/app/outputs/flutter-apk/app-release.apk
