@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
+import 'package:ugd2_c_kelompok6/tabs.dart';
 
 void main() {
   runApp(const MainApp());
@@ -23,7 +24,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
-      home: const LoginView(),
+      home: const TabsScreen(),
     );
   }
 }
