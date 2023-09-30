@@ -87,7 +87,7 @@ class _LoginView extends State<LoginView> {
                             dataForm['username'] == usernameController.text &&
                             dataForm['password'] == passwordController.text) {
                           Fluttertoast.showToast(
-                            msg: "Berhasil Login",
+                            msg: "Berhasil Loginnn",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.TOP,
                             timeInSecForIosWeb: 1,
