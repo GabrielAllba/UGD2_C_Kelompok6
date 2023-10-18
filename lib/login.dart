@@ -87,7 +87,7 @@ class _LoginView extends State<LoginView> {
                             dataForm['username'] == usernameController.text &&
                             dataForm['password'] == passwordController.text) {
                           Fluttertoast.showToast(
-                            msg: "Berhasil Loginnn",
+                            msg: "Berhasil Login",
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.TOP,
                             timeInSecForIosWeb: 1,
@@ -96,7 +96,9 @@ class _LoginView extends State<LoginView> {
                             fontSize: 16.0,
                           );
 
-                          await Future.delayed(Duration(seconds: 2));
+                          await Future.delayed(
+                            Duration(seconds: 2),
+                          );
 
                           Navigator.push(
                             context,
@@ -111,10 +113,10 @@ class _LoginView extends State<LoginView> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
-                              title: const Text('Passwrrrord Salah'),
+                              title: const Text('Password Salah'),
                               content: TextButton(
                                 onPressed: () => pushRegister(context),
-                                child: const Text('Daftar Disini !!'),
+                                child: const Text('Daftar Disini!'),
                               ),
                               actions: <Widget>[
                                 TextButton(
@@ -132,7 +134,7 @@ class _LoginView extends State<LoginView> {
                         }
                       }
                     },
-                    child: const Text('Login'),
+                    child: const Text('Login DUlu'),
                   ),
                   TextButton(
                     onPressed: () {

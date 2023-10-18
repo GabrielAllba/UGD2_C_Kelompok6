@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -175,12 +176,27 @@ class _RegisterViewState extends State<RegisterView> {
                   height: 16,
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate() &&
                         _tanggal.isNotEmpty) {
                       Map<String, dynamic> formData = {};
                       formData['username'] = usernameController.text;
                       formData['password'] = passwordController.text;
+
+                      Fluttertoast.showToast(
+                        msg: "Berhasil Register",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+
+                      await Future.delayed(
+                        Duration(seconds: 2),
+                      );
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
