@@ -45,11 +45,6 @@ class _RegisterViewState extends State<RegisterView> {
                 'Pastikan Semua Data Sudah Lengkap',
                 style: TextStyle(fontSize: 18.0),
               ),
-              SizedBox(height: 10.0),
-              Text(
-                'Paham?',
-                style: TextStyle(fontSize: 18.0),
-              ),
             ],
           ),
           actions: <Widget>[
@@ -166,7 +161,7 @@ class _RegisterViewState extends State<RegisterView> {
                     return null;
                   }),
                   controller: dateController,
-                  hintTxt: "Tanggal",
+                  hintTxt: "Tanggal Lahir",
                   helperTxt: "2004-12-12",
                   onTap: _showDatePicker,
                   isDate: true,
@@ -175,44 +170,69 @@ class _RegisterViewState extends State<RegisterView> {
                 const SizedBox(
                   height: 16,
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate() &&
-                        _tanggal.isNotEmpty) {
-                      Map<String, dynamic> formData = {};
-                      formData['username'] = usernameController.text;
-                      formData['password'] = passwordController.text;
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate() &&
+                            _tanggal.isNotEmpty) {
+                          Map<String, dynamic> formData = {};
+                          formData['username'] = usernameController.text;
+                          formData['password'] = passwordController.text;
 
-                      Fluttertoast.showToast(
-                        msg: "Berhasil Register",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.blue,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
+                          Fluttertoast.showToast(
+                            msg: "Berhasil Register",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.blue,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
 
-                      await Future.delayed(
-                        Duration(seconds: 2),
-                      );
+                          await Future.delayed(
+                            Duration(seconds: 2),
+                          );
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => LoginView(
-                            data: formData,
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => LoginView(
+                                data: formData,
+                              ),
+                            ),
+                          );
+                        }
+
+                        if (_tanggal.isEmpty) {
+                          _showMyDialog();
+                        }
+                      },
+                      child: const Text('Register'),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        Map<String, dynamic> formData = {};
+                        formData['username'] = usernameController.text;
+                        formData['password'] = passwordController.text;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => LoginView(
+                              data: formData,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-
-                    if (_tanggal.isEmpty) {
-                      _showMyDialog();
-                    }
-                  },
-                  child: const Text('Register'),
-                )
+                        );
+                      },
+                      child: const Text('Login'),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

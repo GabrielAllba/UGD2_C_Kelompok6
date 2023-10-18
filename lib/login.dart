@@ -114,10 +114,6 @@ class _LoginView extends State<LoginView> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               title: const Text('Password Salah'),
-                              content: TextButton(
-                                onPressed: () => pushRegister(context),
-                                child: const Text('Daftar Disini!'),
-                              ),
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () =>
@@ -134,7 +130,7 @@ class _LoginView extends State<LoginView> {
                         }
                       }
                     },
-                    child: const Text('Login DUlu'),
+                    child: const Text('Login'),
                   ),
                   TextButton(
                     onPressed: () {
