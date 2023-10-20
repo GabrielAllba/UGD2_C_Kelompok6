@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
+import 'package:ugd2_c_kelompok6/database/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/screens/register.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -20,6 +22,10 @@ class _LoginView extends State<LoginView> {
 
   bool isPasswordVisible = false;
 
+  @override
+  void initState(){
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
@@ -83,9 +89,11 @@ class _LoginView extends State<LoginView> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        if (dataForm != null &&
-                            dataForm['username'] == usernameController.text &&
-                            dataForm['password'] == passwordController.text) {
+                        String username = usernameController.text;
+                        String password= passwordController.text;
+
+                        List<Map<String, dynamic>> user = await SQLHelper.getViaUser(username);
+                        if (user.isNotEmpty && user[0]['password'] == password) {
                           Fluttertoast.showToast(
                             msg: "Berhasil Login",
                             toastLength: Toast.LENGTH_SHORT,
@@ -95,7 +103,7 @@ class _LoginView extends State<LoginView> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-
+                             await saveUserName(username);
                           await Future.delayed(
                             Duration(seconds: 2),
                           );
@@ -157,5 +165,10 @@ class _LoginView extends State<LoginView> {
         builder: (_) => const RegisterView(),
       ),
     );
+  }
+
+  Future<void> saveUserName(String username) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', username);
   }
 }

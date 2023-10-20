@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
+import 'package:ugd2_c_kelompok6/database/sql_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterView extends StatefulWidget {
@@ -180,7 +181,7 @@ class _RegisterViewState extends State<RegisterView> {
                           Map<String, dynamic> formData = {};
                           formData['username'] = usernameController.text;
                           formData['password'] = passwordController.text;
-
+                          await addUser();
                           Fluttertoast.showToast(
                             msg: "Berhasil Register",
                             toastLength: Toast.LENGTH_SHORT,
@@ -239,5 +240,9 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+  }
+
+  Future<void> addUser() async {
+    await SQLHelper.addUser(usernameController.text, passwordController.text, emailController.text,  notelpController.text, dateController.text);
   }
 }
