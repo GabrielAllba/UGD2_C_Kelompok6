@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/components/fasilitas_umum.dart';
-import 'package:ugd2_c_kelompok6/components/tipe_kamar.dart';
 import 'package:intl/intl.dart';
+import 'package:ugd2_c_kelompok6/screens/search_kamar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -215,8 +215,16 @@ class HomeScreenState extends State<HomeScreen> {
                           width: 8,
                         ),
                         ElevatedButton(
-                          onPressed:
-                              _checkin == '' && _checkout == '' ? null : () {},
+                          onPressed: _checkin == '' && _checkout == ''
+                              ? null
+                              : () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SearchKamar()), // Navigasi ke SearchKamar
+                                  );
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Theme.of(context).colorScheme.primary,
@@ -253,23 +261,6 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const Fasilitas(),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Tipe Kamar',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const TipeKamar(),
         ],
       ),
     );

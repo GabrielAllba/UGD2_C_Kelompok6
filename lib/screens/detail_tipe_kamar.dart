@@ -5,7 +5,7 @@ import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/semua_foto.dart';
 
 class DetailTipeKamar extends StatelessWidget {
-  const DetailTipeKamar({super.key, required this.tipeKamar});
+  const DetailTipeKamar({Key? key, required this.tipeKamar}) : super(key: key);
 
   final TipeKamar tipeKamar;
 
@@ -13,9 +13,9 @@ class DetailTipeKamar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Detail Tipe Kamar ',
-          style: const TextStyle(fontSize: 16),
+        title: const Text(
+          'Detail Tipe Kamar',
+          style: TextStyle(fontSize: 16),
         ),
       ),
       body: SingleChildScrollView(
@@ -174,13 +174,6 @@ class DetailTipeKamar extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
-                  Text(
-                    'Rp. ${tipeKamar.harga} / malam',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  )
                 ],
               ),
             ),
@@ -310,10 +303,10 @@ class DetailTipeKamar extends StatelessWidget {
             Container(
               alignment: Alignment.topLeft,
               padding: const EdgeInsets.all(16),
-              child: Text(
+              child: const Text(
                 'Deskripsi',
                 textAlign: TextAlign.start,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -346,6 +339,48 @@ class DetailTipeKamar extends StatelessWidget {
               height: 24,
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: PreferredSize(
+        preferredSize: Size.fromHeight(80.0),
+        child: Container(
+          color: Colors.blue, // Warna latar belakang diubah menjadi biru
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Harga: Rp. ${tipeKamar.harga}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Do something when the button is pressed
+                  },
+                  child: const Text(
+                    'Pesan Sekarang',
+                    style: TextStyle(
+                        color: Colors
+                            .blue), // Text color disesuaikan dengan warna biru
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors
+                        .white, // Warna latar belakang tombol disesuaikan dengan putih
+                    onPrimary: Colors
+                        .blue, // Warna teks tombol ketika ditekan disesuaikan dengan biru
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
