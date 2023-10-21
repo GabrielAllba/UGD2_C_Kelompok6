@@ -23,9 +23,10 @@ class _LoginView extends State<LoginView> {
   bool isPasswordVisible = false;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
@@ -90,10 +91,12 @@ class _LoginView extends State<LoginView> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         String username = usernameController.text;
-                        String password= passwordController.text;
+                        String password = passwordController.text;
 
-                        List<Map<String, dynamic>> user = await SQLHelper.getViaUser(username);
-                        if (user.isNotEmpty && user[0]['password'] == password) {
+                        List<Map<String, dynamic>> user =
+                            await SQLHelper.getViaUser(username);
+                        if (user.isNotEmpty &&
+                            user[0]['password'] == password) {
                           Fluttertoast.showToast(
                             msg: "Berhasil Login",
                             toastLength: Toast.LENGTH_SHORT,
@@ -103,7 +106,7 @@ class _LoginView extends State<LoginView> {
                             textColor: Colors.white,
                             fontSize: 16.0,
                           );
-                             await saveUserName(username);
+                          await saveUserName(username);
                           await Future.delayed(
                             Duration(seconds: 2),
                           );
@@ -167,7 +170,7 @@ class _LoginView extends State<LoginView> {
     );
   }
 
-  Future<void> saveUserName(String username) async{
+  Future<void> saveUserName(String username) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username', username);
   }
