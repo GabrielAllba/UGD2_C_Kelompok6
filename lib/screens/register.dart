@@ -181,7 +181,9 @@ class _RegisterViewState extends State<RegisterView> {
                           Map<String, dynamic> formData = {};
                           formData['username'] = usernameController.text;
                           formData['password'] = passwordController.text;
+
                           await addUser();
+
                           Fluttertoast.showToast(
                             msg: "Berhasil Register",
                             toastLength: Toast.LENGTH_SHORT,
@@ -243,6 +245,7 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   Future<void> addUser() async {
-    await SQLHelper.addUser(usernameController.text, passwordController.text, emailController.text,  notelpController.text, dateController.text);
+    await SQLHelper.addUser(usernameController.text, passwordController.text,
+        emailController.text, notelpController.text, dateController.text);
   }
 }
