@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/screens/home.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
 import 'package:ugd2_c_kelompok6/screens/profile_kelompok.dart';
+import 'package:ugd2_c_kelompok6/screens/profile_page.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -29,6 +30,8 @@ class _TabsScreenState extends State<TabsScreen> {
       activePage = const Pemesanan();
     } else if (_selectedPageIndex == 2) {
       activePage = const ProfileKelompok();
+    } else if (_selectedPageIndex == 3) {
+      activePage = Profile();
     }
 
     return Scaffold(
@@ -49,6 +52,10 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.group_add_outlined),
             label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_outlined),
+            label: 'Profile Utama',
           ),
         ],
       ),
