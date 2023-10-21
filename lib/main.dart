@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
-import 'package:ugd2_c_kelompok6/screens/search_kamar.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
-import 'package:ugd2_c_kelompok6/database/sql_helper.dart';
+import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 
 void main() {
   runApp(const MainApp());

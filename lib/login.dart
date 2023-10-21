@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
-import 'package:ugd2_c_kelompok6/database/sql_helper.dart';
+import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/screens/register.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:fluttertoast/fluttertoast.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
-import 'package:ugd2_c_kelompok6/database/sql_helper.dart';
+import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterView extends StatefulWidget {
