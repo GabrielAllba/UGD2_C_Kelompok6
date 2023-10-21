@@ -60,12 +60,6 @@ class TipeKamarItem extends StatelessWidget {
                         const SizedBox(
                           width: 4,
                         ),
-                        Text(
-                          'Lihat',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        )
                       ],
                     ),
                   ],

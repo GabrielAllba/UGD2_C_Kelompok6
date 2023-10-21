@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/screens/home.dart';
+import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
 import 'package:ugd2_c_kelompok6/screens/profile_kelompok.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -24,6 +25,8 @@ class _TabsScreenState extends State<TabsScreen> {
 
     if (_selectedPageIndex == 0) {
       activePage = const HomeScreen();
+    } else if (_selectedPageIndex == 1) {
+      activePage = const Pemesanan();
     } else if (_selectedPageIndex == 2) {
       activePage = const ProfileKelompok();
     }
