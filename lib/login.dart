@@ -107,6 +107,8 @@ class _LoginView extends State<LoginView> {
                             fontSize: 16.0,
                           );
                           await saveUserName(username);
+                          await saveIdUser(user[0]['id']);
+
                           await Future.delayed(
                             Duration(seconds: 2),
                           );
@@ -173,5 +175,10 @@ class _LoginView extends State<LoginView> {
   Future<void> saveUserName(String username) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('username', username);
+  }
+
+  Future<void> saveIdUser(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('id', id);
   }
 }

@@ -4,7 +4,10 @@ import 'package:ugd2_c_kelompok6/screens/detail_tipe_kamar.dart';
 // Import the file where tipeKamar is defined
 
 class SearchKamar extends StatelessWidget {
-  const SearchKamar({Key? key}) : super(key: key);
+  SearchKamar({Key? key, required this.checkin, required this.checkout})
+      : super(key: key);
+  String checkin;
+  String checkout;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +27,11 @@ class SearchKamar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      DetailTipeKamar(tipeKamar: tipeKamar[index]),
+                  builder: (context) => DetailTipeKamar(
+                    tipeKamar: tipeKamar[index],
+                    checkin: checkin,
+                    checkout: checkout,
+                  ),
                 ),
               );
             },

@@ -221,8 +221,10 @@ class HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SearchKamar()), // Navigasi ke SearchKamar
+                                        builder: (context) => SearchKamar(
+                                              checkin: checkinInput.text,
+                                              checkout: checkoutInput.text,
+                                            )), // Navigasi ke SearchKamar
                                   );
                                 },
                           style: ElevatedButton.styleFrom(

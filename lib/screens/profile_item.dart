@@ -1,11 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/models/kelompok.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
+import 'package:intl/intl.dart';
+import 'package:ugd2_c_kelompok6/screens/profile_page.dart';
 
-class ProfileItem extends StatelessWidget {
+class ProfileItem extends StatefulWidget {
   const ProfileItem({super.key, required this.orang});
 
   final Orang orang;
+
+  @override
+  State<ProfileItem> createState() => _ProfileItemState();
+}
+
+class _ProfileItemState extends State<ProfileItem> {
+  late TextEditingController usernameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController notelpController;
+  late TextEditingController dateController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    usernameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    notelpController = TextEditingController();
+    dateController = TextEditingController();
+    ambilData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +77,7 @@ class ProfileItem extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      orang.universitas,
+                                      usernameController.text,
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -58,7 +85,7 @@ class ProfileItem extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const Text(
-                                      'Universitas',
+                                      'Username',
                                       style: TextStyle(
                                         color:
                                             Color.fromARGB(255, 137, 137, 137),
@@ -84,7 +111,7 @@ class ProfileItem extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      orang.programStudi,
+                                      emailController.text,
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -92,7 +119,7 @@ class ProfileItem extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const Text(
-                                      'Program Studi',
+                                      'Email',
                                       style: TextStyle(
                                         color:
                                             Color.fromARGB(255, 137, 137, 137),
@@ -126,7 +153,7 @@ class ProfileItem extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${orang.tahunMasuk}',
+                                      '${notelpController.text}',
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -134,7 +161,7 @@ class ProfileItem extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const Text(
-                                      'Angkatan',
+                                      'No Telpon',
                                       style: TextStyle(
                                         color:
                                             Color.fromARGB(255, 137, 137, 137),
@@ -160,7 +187,7 @@ class ProfileItem extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${orang.npm}',
+                                      '${dateController.text}',
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -168,7 +195,7 @@ class ProfileItem extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const Text(
-                                      'NPM',
+                                      'Tanggal Lahir',
                                       style: TextStyle(
                                         color:
                                             Color.fromARGB(255, 137, 137, 137),
@@ -191,56 +218,80 @@ class ProfileItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            'Halo, berikut adalah hobi saya!',
+            'Akses',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
-        CustomScrollView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          slivers: <Widget>[
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: GridTile(
-                      child: Material(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        shadowColor: Colors.black.withOpacity(0.4),
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                orang.hobi[index].icon,
-                                color: Theme.of(context).colorScheme.primary,
-                                size: 48,
-                              ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                orang.hobi[index].nama,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                childCount: orang.hobi.length,
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6.0),
               ),
             ),
-          ],
-        ),
+            child: const Text(
+              'Edit',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        )
+
+        // CustomScrollView(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   slivers: <Widget>[
+        //     SliverGrid(
+        //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //         crossAxisCount: 3,
+        //       ),
+        //       delegate: SliverChildBuilderDelegate(
+        //         (BuildContext context, int index) {
+        //           return Padding(
+        //             padding: const EdgeInsets.all(8),
+        //             child: GridTile(
+        //               child: Material(
+        //                 elevation: 5,
+        //                 shape: RoundedRectangleBorder(
+        //                   borderRadius: BorderRadius.circular(8.0),
+        //                 ),
+        //                 shadowColor: Colors.black.withOpacity(0.4),
+        //                 child: Container(
+        //                   child: Column(
+        //                     mainAxisAlignment: MainAxisAlignment.center,
+        //                     children: [
+        //                       Icon(
+        //                         widget.orang.hobi[index].icon,
+        //                         color: Theme.of(context).colorScheme.primary,
+        //                         size: 48,
+        //                       ),
+        //                       const SizedBox(
+        //                         height: 4,
+        //                       ),
+        //                       Text(
+        //                         widget.orang.hobi[index].nama,
+        //                       )
+        //                     ],
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           );
+        //         },
+        //         childCount: widget.orang.hobi.length,
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }
@@ -271,33 +322,32 @@ class ProfileItem extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: CircleAvatar(
                 backgroundColor: Colors.grey.shade800,
-                backgroundImage: AssetImage(orang.profile),
+                backgroundImage: AssetImage(widget.orang.profile),
                 radius: double.infinity,
               ),
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            orang.nama,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            '${orang.panggilan}, ${orang.umur}',
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            orang.email,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          )
         ],
       );
+
+  Future<void> ambilData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      usernameController.text = pref.getString('username') ?? '';
+    });
+
+    final isiData = await _getData();
+    if (isiData != null) {
+      usernameController.text = isiData['username'] ?? '';
+      emailController.text = isiData['email'] ?? '';
+      passwordController.text = isiData['password'] ?? '';
+      notelpController.text = isiData['notelp'] ?? '';
+      dateController.text = isiData['date'] ?? '';
+    }
+  }
+
+  Future<Map<String, dynamic>?> _getData() async {
+    return await SQLHelper.getUserByUsername(usernameController.text);
+  }
 }
