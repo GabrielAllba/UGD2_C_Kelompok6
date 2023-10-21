@@ -319,8 +319,7 @@ class DetailTipeKamar extends StatelessWidget {
                 width: double.infinity,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 217, 217,
-                        217), // You can change the color to your desired color
+                    color: const Color.fromARGB(255, 217, 217, 217),
                   ),
                 ),
               ),
@@ -344,7 +343,7 @@ class DetailTipeKamar extends StatelessWidget {
       bottomNavigationBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
         child: Container(
-          color: Colors.blue, // Warna latar belakang diubah menjadi biru
+          color: Colors.blue,
           width: MediaQuery.of(context).size.width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -362,20 +361,14 @@ class DetailTipeKamar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Do something when the button is pressed
-                  },
+                  onPressed: () {},
                   child: const Text(
                     'Pesan Sekarang',
-                    style: TextStyle(
-                        color: Colors
-                            .blue), // Text color disesuaikan dengan warna biru
+                    style: TextStyle(color: Colors.blue),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors
-                        .white, // Warna latar belakang tombol disesuaikan dengan putih
-                    onPrimary: Colors
-                        .blue, // Warna teks tombol ketika ditekan disesuaikan dengan biru
+                    primary: Colors.white,
+                    onPrimary: Colors.blue,
                   ),
                 ),
               ),
