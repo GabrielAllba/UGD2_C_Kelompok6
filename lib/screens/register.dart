@@ -128,20 +128,22 @@ class _RegisterViewState extends State<RegisterView> {
                     hintTxt: "Email",
                     helperTxt: "gabriel@gmail.com",
                     iconData: Icons.email),
-                inputForm(((p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Password tidak boleh kosong';
-                  }
-                  if (p0.length < 5) {
-                    return 'Password minimal 5 digit';
-                  }
-                  return null;
-                }),
-                    controller: passwordController,
-                    hintTxt: "Password",
-                    helperTxt: "xxxxxxx",
-                    iconData: Icons.password,
-                    password: true),
+                inputForm(
+                  ((p0) {
+                    if (p0 == null || p0.isEmpty) {
+                      return 'Password tidak boleh kosong';
+                    }
+                    if (p0.length < 5) {
+                      return 'Password minimal 5 digit';
+                    }
+                    return null;
+                  }),
+                  controller: passwordController,
+                  hintTxt: "Password",
+                  helperTxt: "xxxxxxx",
+                  iconData: Icons.password,
+                  password: true,
+                ),
                 inputForm(
                   ((p0) {
                     if (p0 == null || p0.isEmpty) {

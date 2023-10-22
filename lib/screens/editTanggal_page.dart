@@ -19,12 +19,13 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  bool updated = false;
   TextEditingController controllerTanggalCheckin = TextEditingController();
   TextEditingController controllerTanggalCheckout = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    if (widget.id != null) {
+    if (widget.id != null && !updated) {
       controllerTanggalCheckin.text = widget.tanggal_checkin!;
       controllerTanggalCheckout.text = widget.tanggal_checkout!;
     }
@@ -51,10 +52,14 @@ class _InputPageState extends State<InputPage> {
               );
 
               if (pickedDate != null) {
-                setState(() {
-                  controllerTanggalCheckin.text =
-                      DateFormat('yyyy-MM-dd').format(pickedDate);
-                });
+                String formattedDate =
+                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                setState(
+                  () {
+                    updated = true;
+                    controllerTanggalCheckin.text = formattedDate;
+                  },
+                );
               }
             },
           ),
