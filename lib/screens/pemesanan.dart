@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
+import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Pemesanan extends StatefulWidget {
@@ -14,6 +15,12 @@ class Pemesanan extends StatefulWidget {
 class _PemesananState extends State<Pemesanan> {
   List<Map<String, dynamic>> pemesananData = [];
 
+  void refresh() async{
+    final data = await SQLHelper.getPemesanan();
+    setState(() {
+      pemesananData = data;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -53,13 +60,27 @@ class _PemesananState extends State<Pemesanan> {
                       caption: 'Ubah Tanggal',
                       color: Colors.blue,
                       icon: Icons.update,
-                      onTap: () {},
+                      onTap: () async {
+                         Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InputPage(
+                        title: 'Edit Tanggal',
+                        id: pemesanan['id'], 
+                        tanggal_checkin: pemesanan['tanggal_checkin'],
+                        tanggal_checkout: pemesanan['tanggal_checkout'], 
+                        ),
+                    )
+                         ).then((_) => refresh());
+                      },
                     ),
                     IconSlideAction(
                       caption: 'Batalkan',
                       color: Colors.red,
                       icon: Icons.delete,
-                      onTap: () {},
+                      onTap: () async {
+                        await deleteKamar(pemesananData[index]['id']);
+                      },
                     )
                   ],
                   child: ListTile(
@@ -138,5 +159,10 @@ class _PemesananState extends State<Pemesanan> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? userId = prefs.getInt('id');
     return userId!;
+  }
+
+  Future<void> deleteKamar(int id) async {
+    await SQLHelper.deletePemesanan(id);
+    refresh();
   }
 }

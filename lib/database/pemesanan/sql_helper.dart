@@ -8,8 +8,8 @@ class SQLHelper {
         id_user INTEGER,
         tipe_kamar TEXT,
         harga INTEGER,
-        tanggal_checkin TEXT,
-        tanggal_checkout TEXT
+        tanggal_checkin TEXT, -- CHANGE to TEXT
+        tanggal_checkout TEXT -- CHANGE to TEXT
       ) 
     """);
   }
@@ -94,6 +94,20 @@ class SQLHelper {
 
     return await db.update('pemesanan', data, where: "id = $id");
   }
+
+
+    static Future<int> editPemesananWithId(int id,
+      String tanggal_checkin, String tanggal_checkout) async {
+    final db = await SQLHelper.db();
+    final data = {
+      
+      'tanggal_checkin': tanggal_checkin,
+      'tanggal_checkout': tanggal_checkout
+    };
+
+    return await db.update('pemesanan', data, where: "id = $id");
+  }
+
 
   static Future<int> deletePemesanan(int id) async {
     final db = await SQLHelper.db();
