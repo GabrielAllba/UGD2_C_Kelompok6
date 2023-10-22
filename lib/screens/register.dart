@@ -102,32 +102,37 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(
                   height: 96,
                 ),
-                inputForm((p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Username Tidak Boleh Kosong';
-                  }
-                  if (p0.toLowerCase() == 'anjing') {
-                    return 'Tidak boleh menggunakan kata kasar';
-                  }
-                  return null;
-                },
-                    controller: usernameController,
-                    hintTxt: "Username",
-                    helperTxt: "Gabriel Alba",
-                    iconData: Icons.person),
-                inputForm(((p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return 'Email tidak boleh kosong';
-                  }
-                  if (!p0.contains('@')) {
-                    return 'Email harus menggunakan @';
-                  }
-                  return null;
-                }),
-                    controller: emailController,
-                    hintTxt: "Email",
-                    helperTxt: "gabriel@gmail.com",
-                    iconData: Icons.email),
+                inputForm(
+                  (p0) {
+                    if (p0 == null || p0.isEmpty) {
+                      return 'Username Tidak Boleh Kosong';
+                    }
+                    if (p0.toLowerCase() == 'anjing') {
+                      return 'Tidak boleh menggunakan kata kasar';
+                    }
+                    return null;
+                  },
+                  controller: usernameController,
+                  hintTxt: "Username",
+                  helperTxt: "Gabriel Alba",
+                  iconData: Icons.person,
+                ),
+                inputForm(
+                  ((p0) {
+                    if (p0 == null || p0.isEmpty) {
+                      return 'Email tidak boleh kosong';
+                    }
+                    if (!p0.contains('@')) {
+                      return 'Email harus menggunakan @';
+                    }
+
+                    return null;
+                  }),
+                  controller: emailController,
+                  hintTxt: "Email",
+                  helperTxt: "gabriel@gmail.com",
+                  iconData: Icons.email,
+                ),
                 inputForm(
                   ((p0) {
                     if (p0 == null || p0.isEmpty) {
@@ -180,38 +185,52 @@ class _RegisterViewState extends State<RegisterView> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
                             _tanggal.isNotEmpty) {
-                          Map<String, dynamic> formData = {};
-                          formData['username'] = usernameController.text;
-                          formData['password'] = passwordController.text;
+                          if (await SQLHelper.isEmailExists(
+                                  emailController.text) ==
+                              true) {
+                            Fluttertoast.showToast(
+                              msg: "Email sudah digunakan oleh orang lain!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          } else {
+                            Map<String, dynamic> formData = {};
+                            formData['username'] = usernameController.text;
+                            formData['password'] = passwordController.text;
 
-                          await addUser();
+                            await addUser();
 
-                          Fluttertoast.showToast(
-                            msg: "Berhasil Register",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.TOP,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.blue,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
+                            Fluttertoast.showToast(
+                              msg: "Berhasil Register",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
 
-                          await Future.delayed(
-                            Duration(seconds: 2),
-                          );
+                            await Future.delayed(
+                              Duration(seconds: 2),
+                            );
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => LoginView(
-                                data: formData,
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => LoginView(
+                                  data: formData,
+                                ),
                               ),
-                            ),
-                          );
-                        }
+                            );
+                          }
 
-                        if (_tanggal.isEmpty) {
-                          _showMyDialog();
+                          if (_tanggal.isEmpty) {
+                            _showMyDialog();
+                          }
                         }
                       },
                       child: const Text('Register'),
