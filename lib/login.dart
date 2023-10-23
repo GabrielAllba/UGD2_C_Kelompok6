@@ -51,7 +51,7 @@ class _LoginView extends State<LoginView> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: SizedBox(
-                  width: 350,
+                  width: 450,
                   child: TextFormField(
                     controller: passwordController,
                     obscureText: !isPasswordVisible,

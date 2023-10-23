@@ -23,6 +23,8 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController notelpController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
+  bool isPasswordVisible = false;
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -67,8 +69,8 @@ class _RegisterViewState extends State<RegisterView> {
   void _showDatePicker() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime(2023),
-      firstDate: DateTime(2023),
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1999),
       lastDate: DateTime(2101),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -133,22 +135,38 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "gabriel@gmail.com",
                   iconData: Icons.email,
                 ),
-                inputForm(
-                  ((p0) {
-                    if (p0 == null || p0.isEmpty) {
-                      return 'Password tidak boleh kosong';
-                    }
-                    if (p0.length < 5) {
-                      return 'Password minimal 5 digit';
-                    }
-                    return null;
-                  }),
-                  controller: passwordController,
-                  hintTxt: "Password",
-                  helperTxt: "xxxxxxx",
-                  iconData: Icons.password,
-                  password: true,
-                ),
+                Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                        width: 400,
+                        child: TextFormField(
+                            controller: passwordController,
+                            obscureText: !isPasswordVisible,
+                            validator: (p0) {
+                              if (p0 == null || p0.isEmpty) {
+                                return "password kosong";
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              hintText: "Password",
+                              labelText: "Password",
+                              helperText: "xxxxxx",
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isPasswordVisible = !isPasswordVisible;
+                                  });
+                                },
+                                child: Icon(
+                                  isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
+                              prefixIcon: const Icon(Icons.password),
+                            )))),
                 inputForm(
                   ((p0) {
                     if (p0 == null || p0.isEmpty) {
