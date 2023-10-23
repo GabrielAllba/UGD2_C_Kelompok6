@@ -1,3 +1,4 @@
 {
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "cmake.sourceDirectory": "C:/1Kuliah/Atma/SEMESTER5/Mobile/2/unguided/ugd2_c_kelompok6/linux"
 }

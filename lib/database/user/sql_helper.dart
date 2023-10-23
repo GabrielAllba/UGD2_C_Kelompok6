@@ -93,6 +93,7 @@ class SQLHelper {
       'email': email,
       'notelp': notelp,
     };
+
     return await db
         .update('user', data, where: "username = ?", whereArgs: [username]);
   }

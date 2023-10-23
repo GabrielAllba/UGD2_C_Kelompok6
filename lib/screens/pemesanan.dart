@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ugd2_c_kelompok6/screens/hasilCariNamaKamar.dart';
 
 class Pemesanan extends StatefulWidget {
   const Pemesanan({Key? key});
@@ -14,17 +16,36 @@ class Pemesanan extends StatefulWidget {
 
 class _PemesananState extends State<Pemesanan> {
   List<Map<String, dynamic>> pemesananData = [];
+  int? id_user;
 
-  void refresh() async{
+  void refresh() async {
     final data = await SQLHelper.getPemesanan();
     setState(() {
       pemesananData = data;
     });
   }
+
+  void filterSearch(String query, int id_user) async {
+    final data = await SQLHelper.getPemesananByQuery(query, id_user);
+    setState(() {
+      pemesananData = data;
+    });
+    print(pemesananData);
+  }
+
   @override
   void initState() {
     super.initState();
+    setIdUserFromSP();
     loadData();
+  }
+
+  void setIdUserFromSP() async {
+    int id = await getUserIdFromSharedPreferences();
+
+    setState(() {
+      id_user = id;
+    });
   }
 
   Future<void> loadData() async {
@@ -36,19 +57,53 @@ class _PemesananState extends State<Pemesanan> {
     });
   }
 
+  TextEditingController searchController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Daftar Pemesanan',
-          style: TextStyle(fontSize: 16),
+        automaticallyImplyLeading: false,
+        title: Center(
+          child: const Text(
+            'Daftar Pemesanan',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
         ),
-        centerTitle: true,
       ),
-      body: pemesananData.isEmpty
-          ? Center(child: Text('No pemesanan found'))
-          : ListView.builder(
+      body: Column(
+        children: [
+          Form(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration: const InputDecoration(
+                      labelText: "Nama Hotel yang di pesan",
+                      prefixIcon: Icon(Icons.bed_outlined),
+                    ),
+                    onChanged: (e) => {
+                      filterSearch(
+                        searchController.text,
+                        id_user!,
+                      ),
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
               itemCount: pemesananData.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> pemesanan = pemesananData[index];
@@ -61,17 +116,19 @@ class _PemesananState extends State<Pemesanan> {
                       color: Colors.blue,
                       icon: Icons.update,
                       onTap: () async {
-                         Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InputPage(
-                        title: 'Edit Tanggal',
-                        id: pemesanan['id'], 
-                        tanggal_checkin: pemesanan['tanggal_checkin'],
-                        tanggal_checkout: pemesanan['tanggal_checkout'], 
-                        ),
-                    )
-                         ).then((_) => refresh());
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InputPage(
+                                title: 'Edit Tanggal',
+                                id: pemesanan['id'],
+                                tanggal_checkin: pemesanan['tanggal_checkin'],
+                                tanggal_checkout: pemesanan['tanggal_checkout'],
+                                tipe_kamar: pemesanan['tipe_kamar'],
+                                harga: pemesanan['harga'],
+                                harga_dasar: pemesanan['harga_dasar'],
+                              ),
+                            )).then((_) => refresh());
                       },
                     ),
                     IconSlideAction(
@@ -80,6 +137,7 @@ class _PemesananState extends State<Pemesanan> {
                       icon: Icons.delete,
                       onTap: () async {
                         await deleteKamar(pemesananData[index]['id']);
+                        loadData();
                       },
                     )
                   ],
@@ -152,6 +210,9 @@ class _PemesananState extends State<Pemesanan> {
                 );
               },
             ),
+          ),
+        ],
+      ),
     );
   }
 

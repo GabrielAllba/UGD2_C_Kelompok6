@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 TextFormField(
                   controller: usernameController,
-                  enabled: false,
+                  enabled: true,
                   decoration: const InputDecoration(
                     labelText: "Username",
                     prefixIcon: Icon(Icons.person),
@@ -159,5 +159,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
     await SQLHelper.editUserByUserName(
         updateUser, updatePass, updateEmail, updateNoTelp);
+    
   }
 }

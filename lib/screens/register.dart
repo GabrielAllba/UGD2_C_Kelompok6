@@ -107,8 +107,8 @@ class _RegisterViewState extends State<RegisterView> {
                     if (p0 == null || p0.isEmpty) {
                       return 'Username Tidak Boleh Kosong';
                     }
-                    if (p0.toLowerCase() == 'anjing') {
-                      return 'Tidak boleh menggunakan kata kasar';
+                    if (p0 == '-') {
+                      return 'Username Tidak Boleh -';
                     }
                     return null;
                   },
@@ -155,6 +155,9 @@ class _RegisterViewState extends State<RegisterView> {
                     if (p0 == null || p0.isEmpty) {
                       return 'Nomor Telepon tidak boleh kosong';
                     }
+                    if (p0.length != 8) {
+                      return 'Nomor telepon harus 8 digit';
+                    }
                     return null;
                   }),
                   controller: notelpController,
@@ -165,8 +168,33 @@ class _RegisterViewState extends State<RegisterView> {
                 MyInputForm(
                   validasi: ((p0) {
                     if (p0 == null || p0.isEmpty) {
-                      return 'Tanggal Lahir';
+                      Fluttertoast.showToast(
+                        msg: "Tanggal Lahir Harus Diisi",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      return 'Tanggal Lahir Harus Diisi';
                     }
+                    DateTime dateTime = DateTime.parse(p0);
+                    DateTime now = DateTime.now();
+
+                    if (!dateTime.isBefore(now)) {
+                      Fluttertoast.showToast(
+                        msg: "Tanggal Lahir Harus > sekarang",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.TOP,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      return 'Tanggal Lahir harus sebelum tanggal saat ini';
+                    }
+
                     return null;
                   }),
                   controller: dateController,

@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
@@ -7,36 +8,53 @@ class SQLHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         id_user INTEGER,
         tipe_kamar TEXT,
+        harga_dasar INTEGER,
         harga INTEGER,
-        tanggal_checkin TEXT, -- CHANGE to TEXT
-        tanggal_checkout TEXT -- CHANGE to TEXT
+        tanggal_checkin TEXT, 
+        tanggal_checkout TEXT 
       ) 
     """);
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('pemesanan.db', version: 1,
+    return sql.openDatabase('pemesanan.db', version: 2,
         onCreate: (sql.Database database, int version) async {
       await createTables(database);
     });
   }
 
   static Future<int> addPemesanan(int id_user, String tipe_kamar, int harga,
-      String tanggal_checkin, String tanggal_checkout) async {
+      int harga_dasar, String tanggal_checkin, String tanggal_checkout) async {
     final db = await SQLHelper.db();
     final data = {
       'id_user': id_user,
       'tipe_kamar': tipe_kamar,
       'harga': harga,
+      'harga_dasar': harga_dasar,
       'tanggal_checkin': tanggal_checkin,
       'tanggal_checkout': tanggal_checkout
     };
+
     return await db.insert('pemesanan', data);
   }
 
   static Future<List<Map<String, dynamic>>> getPemesanan() async {
     final db = await SQLHelper.db();
     return db.query('pemesanan');
+  }
+
+  static Future<List<Map<String, dynamic>>> getPemesananById(int id) async {
+    final db = await SQLHelper.db();
+    return db.query('pemesanan', where: 'id_ = ?', whereArgs: [id]);
+  }
+
+  static Future<List<Map<String, dynamic>>> getPemesananByQuery(
+      String query, int id_user) async {
+    final db = await SQLHelper.db();
+    final queryResult = await db.query('pemesanan',
+        where: 'id_user = ? AND tipe_kamar LIKE ?',
+        whereArgs: [id_user, '%$query%']);
+    return queryResult;
   }
 
   static Future<void> getDataAndPrint() async {
@@ -83,11 +101,19 @@ class SQLHelper {
   }
 
   static Future<int> editPemesanan(int id, String tipe_kamar, int harga,
-      String tanggal_checkin, String tanggal_checkout) async {
+      int harga_dasar, String tanggal_checkin, String tanggal_checkout) async {
     final db = await SQLHelper.db();
+
+    Duration difference = DateTime.parse(tanggal_checkout)
+        .difference(DateTime.parse(tanggal_checkin));
+    int selisih = difference.inDays;
+    int price = selisih * harga_dasar;
+    print(selisih);
+    print(harga_dasar);
     final data = {
       'tipe_kamar': tipe_kamar,
-      'harga': harga,
+      'harga': price,
+      'harga_dasar': harga_dasar,
       'tanggal_checkin': tanggal_checkin,
       'tanggal_checkout': tanggal_checkout
     };
@@ -95,19 +121,16 @@ class SQLHelper {
     return await db.update('pemesanan', data, where: "id = $id");
   }
 
-
-    static Future<int> editPemesananWithId(int id,
-      String tanggal_checkin, String tanggal_checkout) async {
+  static Future<int> editPemesananWithId(
+      int id, String tanggal_checkin, String tanggal_checkout) async {
     final db = await SQLHelper.db();
     final data = {
-      
       'tanggal_checkin': tanggal_checkin,
       'tanggal_checkout': tanggal_checkout
     };
 
     return await db.update('pemesanan', data, where: "id = $id");
   }
-
 
   static Future<int> deletePemesanan(int id) async {
     final db = await SQLHelper.db();

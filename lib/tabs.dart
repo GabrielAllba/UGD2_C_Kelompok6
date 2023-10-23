@@ -45,7 +45,7 @@ class _TabsScreenState extends State<TabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book_outlined),
-            label: 'My Booking',
+            label: 'Pemesanan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group_add_outlined),

@@ -31,6 +31,7 @@ class SearchKamar extends StatelessWidget {
                     tipeKamar: tipeKamar[index],
                     checkin: checkin,
                     checkout: checkout,
+                    harga_dasar: tipeKamar[index].harga,
                   ),
                 ),
               );

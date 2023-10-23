@@ -14,11 +14,13 @@ class DetailTipeKamar extends StatefulWidget {
     required this.tipeKamar,
     this.checkin,
     this.checkout,
+    this.harga_dasar,
   }) : super(key: key);
 
   final TipeKamar tipeKamar;
   final String? checkin;
   final String? checkout;
+  final int? harga_dasar;
 
   @override
   State<DetailTipeKamar> createState() => _DetailTipeKamarState();
@@ -407,13 +409,6 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                           await Future.delayed(
                             Duration(seconds: 2),
                           );
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => Pemesanan(),
-                            ),
-                          );
                         },
                         child: const Text(
                           'Pesan Sekarang',
@@ -433,11 +428,13 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
     );
   }
 
-  Future<void> addPemesanan() async {
-    print('111111');
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    print('2222');
+  Future<void> saveIdPemesanan(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('id_pemesanan', id);
+  }
 
+  Future<void> addPemesanan() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       username = pref.getString('username');
       idUser = pref.getInt('id');
@@ -448,18 +445,13 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
     int selisih = difference.inDays;
     int price = selisih * widget.tipeKamar.harga;
 
-    print('33333');
-    print(username);
-    print(idUser);
     await SQLHelper.addPemesanan(
       idUser!,
       widget.tipeKamar.nama,
       price,
+      widget.harga_dasar!,
       widget.checkin!,
       widget.checkout!,
     );
-    print('444444');
-
-    SQLHelper.getDataAndPrint();
   }
 }

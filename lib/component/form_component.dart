@@ -84,7 +84,8 @@ class _MyInputFormState extends State<MyInputForm> {
     } else {
       childWidget = SizedBox(
         width: double.infinity,
-        child: TextField(
+        child: TextFormField(
+          validator: (value) => widget.validasi(value),
           controller: widget.controller,
           decoration: InputDecoration(
             hintText: widget.hintTxt,

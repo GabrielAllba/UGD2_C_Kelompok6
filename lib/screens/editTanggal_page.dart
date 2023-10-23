@@ -3,15 +3,19 @@ import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:intl/intl.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage({
-    super.key,
-    required this.title,
-    required this.id,
-    required this.tanggal_checkin,
-    required this.tanggal_checkout,
-  });
+  const InputPage(
+      {super.key,
+      required this.title,
+      required this.id,
+      required this.tanggal_checkin,
+      required this.tanggal_checkout,
+      required this.tipe_kamar,
+      required this.harga,
+      required this.harga_dasar});
 
-  final String? title, tanggal_checkin, tanggal_checkout;
+  final String title, tanggal_checkin, tanggal_checkout, tipe_kamar;
+  final int harga, harga_dasar;
+
   final int? id;
 
   @override
@@ -37,6 +41,33 @@ class _InputPageState extends State<InputPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
+          Row(
+            children: [
+              Text(
+                'Tipe Kamar : ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(widget.tipe_kamar)
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'Harga : ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text('Rp. ' + widget.harga.toString())
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'Harga Dasar : ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text('Rp. ' + widget.harga_dasar.toString())
+            ],
+          ),
           TextFormField(
             controller: controllerTanggalCheckin,
             decoration: const InputDecoration(
@@ -83,6 +114,7 @@ class _InputPageState extends State<InputPage> {
 
               if (pickedDate != null) {
                 setState(() {
+                  updated = true;
                   controllerTanggalCheckout.text =
                       DateFormat('yyyy-MM-dd').format(pickedDate);
                 });
@@ -107,7 +139,8 @@ class _InputPageState extends State<InputPage> {
         .format(DateTime.parse(controllerTanggalCheckin.text));
     String formattedTanggalCheckout = DateFormat('yyyy-MM-dd')
         .format(DateTime.parse(controllerTanggalCheckout.text));
-    await SQLHelper.editPemesananWithId(
-        id, formattedTanggalCheckin, formattedTanggalCheckout);
+    final harga = SQLHelper.getPemesananById(id);
+    await SQLHelper.editPemesanan(id, widget.tipe_kamar, widget.harga,
+        widget.harga_dasar, formattedTanggalCheckin, formattedTanggalCheckout);
   }
 }
