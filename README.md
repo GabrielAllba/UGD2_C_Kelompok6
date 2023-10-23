@@ -1,4 +1,5 @@
-# TUBES PBP - Hotel
+# Kelompok 6
+# Kelas C
 
 ## Anggota Kelompok / Kontributor
 - Gabriel Allba Shemi Yuma (210711150)
@@ -7,15 +8,10 @@
 - Prihatinny Jennia K (210711296)
 - Rafael Billy Reznandya (210711297)
 
-## Deskripsi Project
-
-Membuat sebuah aplikasi Pemesanan Kamar Hotel sederhana berbasis Flutter menggunakan bahasa pemrograman dart. Aplikasi ini memiliki 1 role user, yaitu pemesan hotel. Pada aplikasi ini, mahasiswa dapat melihat tipe ruangan yang akan dipesan, melakukan CRUD untuk memesan hotel. Proyek ini dibuat untuk memenuhi tugas matakuliah Pemrograman Berbasis Platform.
-
-### UGD 2
-
-- Eye toggle untuk halaman login
-- Membuat Date Picker untuk bagian register akun
-- Membuat tampilan grid pada halaman page
-- Alert dialog pada saat register
-- Membuat toast pada saat berhasil login
-- Bonus: Profile Kelompok
+### Pembagian Tugas
+- Membuat halaman Register : Riel
+- Membuat  halaman Login untuk melakukan autentikasi user yang sudah dibuat sebelumnya : Robby
+- Memberi tanda saat register dan login berhasil/gagal : Riel
+- Membuat halaman Profile untuk user yang sedang login supaya user dapat memperbaharui data dirinya : Maharani
+- Membuat Create & Read : Billy
+- Membuat Update & Delete : Jenni
