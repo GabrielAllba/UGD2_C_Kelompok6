@@ -33,7 +33,7 @@ class _RegisterViewState extends State<RegisterView> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           title: const Text(
-            'Error',
+            'Error ngab',
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
