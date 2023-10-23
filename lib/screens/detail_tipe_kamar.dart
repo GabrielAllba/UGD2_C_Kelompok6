@@ -12,13 +12,13 @@ class DetailTipeKamar extends StatefulWidget {
   DetailTipeKamar({
     Key? key,
     required this.tipeKamar,
-    required this.checkin,
-    required this.checkout,
+    this.checkin,
+    this.checkout,
   }) : super(key: key);
 
   final TipeKamar tipeKamar;
-  final String checkin;
-  final String checkout;
+  final String? checkin;
+  final String? checkout;
 
   @override
   State<DetailTipeKamar> createState() => _DetailTipeKamarState();
@@ -195,8 +195,14 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                       fontSize: 20,
                     ),
                   ),
-                  Text('Checkin : ' + widget.checkin),
-                  Text('Checkout : ' + widget.checkout),
+                  if (widget.checkin != null && widget.checkout != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Checkin: ${widget.checkin!}'),
+                        Text('Checkout: ${widget.checkout!}'),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -363,65 +369,67 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
           ],
         ),
       ),
-      bottomNavigationBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
-        child: Container(
-          color: Colors.blue,
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Harga: Rp. ${widget.tipeKamar.harga}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    print('asdfasdfdsfadsf');
-                    await addPemesanan();
-                    Fluttertoast.showToast(
-                      msg: "Berhasil Pesan",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.TOP,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blue,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-
-                    await Future.delayed(
-                      Duration(seconds: 2),
-                    );
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => Pemesanan(),
+      bottomNavigationBar: widget.checkin != null
+          ? PreferredSize(
+              preferredSize: Size.fromHeight(80.0),
+              child: Container(
+                color: Colors.blue,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Harga: Rp. ${widget.tipeKamar.harga}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                       ),
-                    );
-                  },
-                  child: const Text(
-                    'Pesan Sekarang',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.blue,
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print('asdfasdfdsfadsf');
+                          await addPemesanan();
+                          Fluttertoast.showToast(
+                            msg: "Berhasil Pesan",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.TOP,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.blue,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+
+                          await Future.delayed(
+                            Duration(seconds: 2),
+                          );
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Pemesanan(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Pesan Sekarang',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          onPrimary: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : null,
     );
   }
 
@@ -435,8 +443,8 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
       idUser = pref.getInt('id');
     });
 
-    Duration difference = DateTime.parse(widget.checkout)
-        .difference(DateTime.parse(widget.checkin));
+    Duration difference = DateTime.parse(widget.checkout!)
+        .difference(DateTime.parse(widget.checkin!));
     int selisih = difference.inDays;
     int price = selisih * widget.tipeKamar.harga;
 
@@ -447,8 +455,8 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
       idUser!,
       widget.tipeKamar.nama,
       price,
-      widget.checkin,
-      widget.checkout,
+      widget.checkin!,
+      widget.checkout!,
     );
     print('444444');
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/components/fasilitas_umum.dart';
 import 'package:intl/intl.dart';
+import 'package:ugd2_c_kelompok6/screens/hasilCariNamaKamar.dart';
 import 'package:ugd2_c_kelompok6/screens/search_kamar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -92,6 +94,7 @@ class HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  TextEditingController searchController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -143,6 +146,77 @@ class HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(left: 16, top: 16),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Lihat kamar!',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Form(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextFormField(
+                    controller: searchController,
+                    decoration: const InputDecoration(
+                      labelText: "Nama Kamar",
+                      prefixIcon: Icon(Icons.bed_outlined),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HasilCariNamaKamar(
+                                query: searchController.text,
+                              ),
+                            ), // Navigasi ke SearchKamar
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                        ),
+                        child: const Text(
+                          "Cari",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -221,10 +295,11 @@ class HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SearchKamar(
-                                              checkin: checkinInput.text,
-                                              checkout: checkoutInput.text,
-                                            )), // Navigasi ke SearchKamar
+                                      builder: (context) => SearchKamar(
+                                        checkin: checkinInput.text,
+                                        checkout: checkoutInput.text,
+                                      ),
+                                    ), // Navigasi ke SearchKamar
                                   );
                                 },
                           style: ElevatedButton.styleFrom(

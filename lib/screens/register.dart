@@ -102,8 +102,8 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(
                   height: 96,
                 ),
-                inputForm(
-                  (p0) {
+                MyInputForm(
+                  validasi: (p0) {
                     if (p0 == null || p0.isEmpty) {
                       return 'Username Tidak Boleh Kosong';
                     }
@@ -117,8 +117,8 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "Gabriel Alba",
                   iconData: Icons.person,
                 ),
-                inputForm(
-                  ((p0) {
+                MyInputForm(
+                  validasi: ((p0) {
                     if (p0 == null || p0.isEmpty) {
                       return 'Email tidak boleh kosong';
                     }
@@ -133,8 +133,8 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "gabriel@gmail.com",
                   iconData: Icons.email,
                 ),
-                inputForm(
-                  ((p0) {
+                MyInputForm(
+                  validasi: ((p0) {
                     if (p0 == null || p0.isEmpty) {
                       return 'Password tidak boleh kosong';
                     }
@@ -148,9 +148,10 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "xxxxxxx",
                   iconData: Icons.password,
                   password: true,
+                  isPassword: true,
                 ),
-                inputForm(
-                  ((p0) {
+                MyInputForm(
+                  validasi: ((p0) {
                     if (p0 == null || p0.isEmpty) {
                       return 'Nomor Telepon tidak boleh kosong';
                     }
@@ -161,8 +162,8 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "082123456789",
                   iconData: Icons.phone_android,
                 ),
-                inputForm(
-                  ((p0) {
+                MyInputForm(
+                  validasi: ((p0) {
                     if (p0 == null || p0.isEmpty) {
                       return 'Tanggal Lahir';
                     }
@@ -185,7 +186,19 @@ class _RegisterViewState extends State<RegisterView> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
                             _tanggal.isNotEmpty) {
-                          if (await SQLHelper.isEmailExists(
+                          if (await SQLHelper.isUsernameExists(
+                                  usernameController.text) ==
+                              true) {
+                            Fluttertoast.showToast(
+                              msg: "Username sudah digunakan orang lain!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          } else if (await SQLHelper.isEmailExists(
                                   emailController.text) ==
                               true) {
                             Fluttertoast.showToast(

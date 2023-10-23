@@ -52,6 +52,19 @@ class SQLHelper {
     return true;
   }
 
+  static Future<bool> isUsernameExists(String username) async {
+    final db = await SQLHelper.db();
+    final count = sql.Sqflite.firstIntValue(await db.rawQuery(
+      'SELECT COUNT(*) FROM user WHERE username = ?',
+      [username],
+    ));
+
+    if (count == 0) {
+      return false;
+    }
+    return true;
+  }
+
   static Future<List<Map<String, dynamic>>> getViaUser(String username) async {
     final db = await SQLHelper.db();
     return db.query('user', where: 'username = ?', whereArgs: [username]);

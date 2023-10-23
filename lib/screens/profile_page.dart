@@ -66,12 +66,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 16,
                 ),
                 TextFormField(
-                    controller: usernameController,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      labelText: "Username",
-                      prefixIcon: Icon(Icons.person),
-                    )),
+                  controller: usernameController,
+                  enabled: false,
+                  decoration: const InputDecoration(
+                    labelText: "Username",
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                ),
                 TextFormField(
                     controller: passwordController,
                     decoration: const InputDecoration(
@@ -115,9 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: const Text(
                         "Update",
                         style: TextStyle(
-                          fontSize: 15,
-                          letterSpacing: 2,
-                          color: Colors.blue,
+                          color: Colors.white,
                         ),
                       ),
                     ),

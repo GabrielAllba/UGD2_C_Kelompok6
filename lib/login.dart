@@ -37,12 +37,13 @@ class _LoginView extends State<LoginView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              inputForm((p0) {
-                if (p0 == null || p0.isEmpty) {
-                  return "username tidak boleh kosong";
-                }
-                return null;
-              },
+              MyInputForm(
+                  validasi: (p0) {
+                    if (p0 == null || p0.isEmpty) {
+                      return "username tidak boleh kosong";
+                    }
+                    return null;
+                  },
                   controller: usernameController,
                   hintTxt: "Username",
                   helperTxt: "Inputkan User yang telah didaftar",
