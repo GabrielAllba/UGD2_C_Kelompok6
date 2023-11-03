@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:input_history_text_field/input_history_text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/components/fasilitas_umum.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/screens/hasilCariNamaKamar.dart';
 import 'package:ugd2_c_kelompok6/screens/search_kamar.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:ugd2_c_kelompok6/database/search_history/sql_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,6 +21,15 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   String _checkin = '';
   String _checkout = '';
+  List<Map<String, dynamic>> searchHistory = [];
+  bool showDropdown = false;
+  String search = '';
+  int? id_user;
+
+  // speech to text
+  SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _lastWords = '';
 
   TextEditingController checkinInput = TextEditingController();
   TextEditingController checkoutInput = TextEditingController();
@@ -25,6 +39,9 @@ class HomeScreenState extends State<HomeScreen> {
     checkinInput.text = "";
     checkoutInput.text = "";
     super.initState();
+    _initSpeech();
+    setIdUserFromSP();
+    loadData('');
   }
 
   void reset() {
@@ -95,6 +112,51 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   TextEditingController searchController = new TextEditingController();
+
+  // speech to text
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(onResult: _onSpeechResult);
+    setState(() {});
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    if (result.finalResult) {
+      setState(() {
+        _lastWords = result.recognizedWords;
+        searchController.text = _lastWords;
+        search = _lastWords;
+      });
+    }
+  }
+
+  void setIdUserFromSP() async {
+    int id = await getUserIdFromSharedPreferences();
+
+    setState(() {
+      id_user = id;
+    });
+  }
+
+  Future<void> loadData(String query) async {
+    int idUser = await getUserIdFromSharedPreferences();
+    List<Map<String, dynamic>> s =
+        await SQLHelper.getSearchHistoryByUser(idUser, query);
+    setState(() {
+      searchHistory = s;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -165,19 +227,82 @@ class HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+          Container(
+            padding: EdgeInsets.only(top: 8),
+            child: Text(
+              _speechToText.isListening
+                  ? '$_lastWords'
+                  : _speechEnabled
+                      ? 'Kamu bisa search pakai microphone'
+                      : 'Tidak bisa akses microphone',
+            ),
+          ),
           Form(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextFormField(
-                    controller: searchController,
-                    decoration: const InputDecoration(
-                      labelText: "Nama Kamar",
-                      prefixIcon: Icon(Icons.bed_outlined),
-                    ),
+                  padding:
+                      const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: searchController,
+                        onTap: () => setState(() {
+                          showDropdown = !showDropdown;
+                          print(showDropdown);
+                        }),
+                        onChanged: (query) {
+                          search = query;
+                          loadData(search);
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Nama Kamar",
+                          prefixIcon: Icon(Icons.bed_outlined),
+                          suffixIcon: GestureDetector(
+                            onTap: _speechToText.isNotListening
+                                ? _startListening
+                                : _stopListening,
+                            child: Icon(_speechToText.isNotListening
+                                ? Icons.mic_off
+                                : Icons.mic),
+                          ),
+                        ),
+                      ),
+                      if (searchHistory.isNotEmpty && showDropdown)
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Column(
+                            children: searchHistory
+                                .map(
+                                  (item) => ListTile(
+                                    title: Text(item['query']),
+                                    onTap: () {
+                                      setState(() {
+                                        searchController.text = item['query'];
+                                        showDropdown = false;
+                                      });
+                                    },
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          SQLHelper.deleteSearchHistory(
+                                              item['id']);
+                                        });
+                                        loadData('');
+                                      },
+                                      child: Icon(Icons.close), // Close icon
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -190,7 +315,17 @@ class HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(right: 16),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          if (search.isNotEmpty) {
+                            if (await SQLHelper.isSame(id_user!, search) ==
+                                false) {
+                              SQLHelper.addSearchHistory(id_user!, search);
+                              setState(() {
+                                loadData('');
+                              });
+                              print(searchHistory);
+                            }
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -342,4 +477,10 @@ class HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Future<int> getUserIdFromSharedPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int? userId = prefs.getInt('id');
+  return userId!;
 }
