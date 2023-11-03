@@ -99,10 +99,16 @@ class HomeScreenState extends State<HomeScreen> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print(placemarks);
 
-    Placemark place = placemarks[0];
-    setState(() {
-      strAlamat = '${place.street}, ${place.subLocality}, ${place.locality}';
-    });
+    if (placemarks.isNotEmpty) {
+      Placemark place = placemarks[0];
+      setState(() {
+        strAlamat = '${place.street}';
+      });
+    } else {
+      setState(() {
+        strAlamat = 'Tidak dapat menemukan alamat';
+      });
+    }
   }
 
   void onTapCheckin() async {
@@ -427,6 +433,11 @@ class HomeScreenState extends State<HomeScreen> {
                         Icons.location_on,
                         size: 24,
                       ),
+                      if (strLatLong
+                          .isNotEmpty) // Menampilkan info lokasi jika sudah ada data
+                        Text(strAlamat),
+                      if (loading) // Menampilkan pesan loading jika sedang mencari lokasi
+                        Text('Mencari lokasi...'),
                     ],
                   ),
                   onTap: () async {
@@ -435,6 +446,8 @@ class HomeScreenState extends State<HomeScreen> {
                     });
 
                     Position position = await _getGeoLocationPosition();
+                    getAddressFromLongLat(position);
+
                     setState(() {
                       loading = false;
                       strLatLong =
