@@ -28,6 +28,9 @@ class HomeScreenState extends State<HomeScreen> {
   bool showDropdown = false;
   String search = '';
   int? id_user;
+  String strLatLong = '';
+  String strAlamat = '';
+  bool loading = false;
 
   // speech to text
   SpeechToText _speechToText = SpeechToText();
@@ -45,6 +48,7 @@ class HomeScreenState extends State<HomeScreen> {
     _initSpeech();
     setIdUserFromSP();
     loadData('');
+    _loadLocationFromSharedPreferences();
   }
 
   void reset() {
@@ -56,17 +60,13 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Get Location
-  String strLatLong = '';
-  String strAlamat = 'Mencari lokasi...';
-  bool loading = false;
-
   //getLatLong
   Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     //location service not enabled, don't continue
     if (!serviceEnabled) {
       await Geolocator.openLocationSettings();
@@ -104,11 +104,36 @@ class HomeScreenState extends State<HomeScreen> {
       setState(() {
         strAlamat = '${place.street}';
       });
+
+      // Simpan data ke SharedPreferences saat data alamat diperbarui
+      _saveLocationToSharedPreferences(
+        '${position.latitude}, ${position.longitude}',
+        strAlamat,
+      );
     } else {
       setState(() {
         strAlamat = 'Tidak dapat menemukan alamat';
       });
     }
+  }
+
+  // Fungsi untuk menyimpan strLatLong dan strAlamat ke dalam SharedPreferences
+  void _saveLocationToSharedPreferences(String latLong, String alamat) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('latLong', latLong);
+    await prefs.setString('alamat', alamat);
+  }
+
+// Fungsi untuk memuat strLatLong dan strAlamat dari SharedPreferences
+  void _loadLocationFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? latLong = prefs.getString('latLong');
+    String? alamat = prefs.getString('alamat');
+
+    setState(() {
+      strLatLong = latLong ?? '';
+      strAlamat = alamat ?? '';
+    });
   }
 
   void onTapCheckin() async {
@@ -433,16 +458,14 @@ class HomeScreenState extends State<HomeScreen> {
                         Icons.location_on,
                         size: 24,
                       ),
-                      if (strLatLong
-                          .isNotEmpty) // Menampilkan info lokasi jika sudah ada data
-                        Text(strAlamat),
-                      if (loading) // Menampilkan pesan loading jika sedang mencari lokasi
-                        Text('Mencari lokasi...'),
+                      if (strLatLong.isNotEmpty) Text(strAlamat),
+                      if (loading) Text('Mencari lokasi...'),
                     ],
                   ),
                   onTap: () async {
                     setState(() {
                       loading = true;
+                      strAlamat = '';
                     });
 
                     Position position = await _getGeoLocationPosition();
