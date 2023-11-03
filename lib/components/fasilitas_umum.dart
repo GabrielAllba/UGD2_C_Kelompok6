@@ -27,32 +27,31 @@ class FasilitasState extends State<Fasilitas> {
                   return GridTile(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Card(
                           elevation: 0,
-                          surfaceTintColor: Colors.white,
+                          color: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  fasilitasUmum[index].icon,
-                                  size: 24,
-                                  color: Theme.of(context).primaryColor,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                fasilitasUmum[index].icon,
+                                size: 24,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                fasilitasUmum[index].title,
+                                style: const TextStyle(
+                                  fontSize: 16,
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  fasilitasUmum[index].title,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         )
                       ],
