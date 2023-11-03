@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/data/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/detail_tipe_kamar.dart';
-// Import the file where tipeKamar is defined
 
 class SearchKamar extends StatelessWidget {
   SearchKamar({Key? key, required this.checkin, required this.checkout})
