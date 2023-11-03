@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
 import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -22,6 +25,24 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
   TextEditingController dateController = TextEditingController();
+  Uint8List? imageBytes;
+
+  @override
+  void initState() {
+    super.initState();
+    loadImageFromAssets();
+  }
+
+  Future<void> loadImageFromAssets() async {
+    try {
+      final ByteData data = await rootBundle
+          .load('images/robby.jpg'); // Replace with your asset path
+      imageBytes = data.buffer.asUint8List();
+      setState(() {});
+    } catch (e) {
+      print('Error loading image from assets: $e');
+    }
+  }
 
   Future<void> _showMyDialog() async {
     return showDialog<void>(
@@ -107,8 +128,8 @@ class _RegisterViewState extends State<RegisterView> {
                     if (p0 == null || p0.isEmpty) {
                       return 'Username Tidak Boleh Kosong';
                     }
-                    if (p0 == '-') {
-                      return 'Username Tidak Boleh -';
+                    if (p0.toLowerCase() == 'anjing') {
+                      return 'Tidak boleh menggunakan kata kasar';
                     }
                     return null;
                   },
@@ -155,9 +176,6 @@ class _RegisterViewState extends State<RegisterView> {
                     if (p0 == null || p0.isEmpty) {
                       return 'Nomor Telepon tidak boleh kosong';
                     }
-                    if (p0.length != 8) {
-                      return 'Nomor telepon harus 8 digit';
-                    }
                     return null;
                   }),
                   controller: notelpController,
@@ -168,33 +186,8 @@ class _RegisterViewState extends State<RegisterView> {
                 MyInputForm(
                   validasi: ((p0) {
                     if (p0 == null || p0.isEmpty) {
-                      Fluttertoast.showToast(
-                        msg: "Tanggal Lahir Harus Diisi",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.blue,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                      return 'Tanggal Lahir Harus Diisi';
+                      return 'Tanggal Lahir';
                     }
-                    DateTime dateTime = DateTime.parse(p0);
-                    DateTime now = DateTime.now();
-
-                    if (!dateTime.isBefore(now)) {
-                      Fluttertoast.showToast(
-                        msg: "Tanggal Lahir Harus > sekarang",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.TOP,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.blue,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                      return 'Tanggal Lahir harus sebelum tanggal saat ini';
-                    }
-
                     return null;
                   }),
                   controller: dateController,
@@ -307,7 +300,19 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   Future<void> addUser() async {
-    await SQLHelper.addUser(usernameController.text, passwordController.text,
-        emailController.text, notelpController.text, dateController.text);
+    print('asdfasdfadsf');
+    print(usernameController.text);
+    print(passwordController.text);
+    print(emailController.text);
+    print(notelpController.text);
+    print(dateController.text);
+    print(imageBytes);
+    await SQLHelper.addUser(
+        usernameController.text,
+        passwordController.text,
+        emailController.text,
+        notelpController.text,
+        dateController.text,
+        imageBytes!);
   }
 }

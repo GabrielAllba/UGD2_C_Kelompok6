@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/models/kelompok.dart';
@@ -21,6 +24,7 @@ class _ProfileItemState extends State<ProfileItem> {
   late TextEditingController passwordController;
   late TextEditingController notelpController;
   late TextEditingController dateController;
+  late Orang orang;
 
   @override
   void initState() {
@@ -36,263 +40,239 @@ class _ProfileItemState extends State<ProfileItem> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(bottom: 150),
-              child: coverImage(),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 150),
-              child: profileImage(),
-            ),
-            Positioned(
-              top: 280,
-              child: Container(
-                child: ElevatedCard(
-                  content: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 219, 233, 255),
-                                  child: Icon(
-                                    Icons.school_outlined,
-                                    color: Color.fromARGB(255, 42, 124, 255),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      usernameController.text,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(
-                                      'Username',
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 137, 137, 137),
+    return FutureBuilder<Orang>(
+      future: _fetchUserData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          return ListView(
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 150),
+                    child: coverImage(),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 150),
+                    child: profileImage(),
+                  ),
+                  Positioned(
+                    top: 280,
+                    child: Container(
+                      child: ElevatedCard(
+                        content: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 219, 233, 255),
+                                        child: Icon(
+                                          Icons.school_outlined,
+                                          color:
+                                              Color.fromARGB(255, 42, 124, 255),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 32,
-                                ),
-                                const CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 219, 233, 255),
-                                  child: Icon(
-                                    Icons.computer_outlined,
-                                    color: Color.fromARGB(255, 42, 124, 255),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      emailController.text,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(
-                                      'Email',
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 137, 137, 137),
+                                      const SizedBox(
+                                        width: 8,
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            usernameController.text,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const Text(
+                                            'Username',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 137, 137, 137),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 32,
+                                      ),
+                                      const CircleAvatar(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 219, 233, 255),
+                                        child: Icon(
+                                          Icons.computer_outlined,
+                                          color:
+                                              Color.fromARGB(255, 42, 124, 255),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            emailController.text,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const Text(
+                                            'Email',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 137, 137, 137),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 219, 233, 255),
+                                        child: Icon(
+                                          Icons.calendar_month_outlined,
+                                          color:
+                                              Color.fromARGB(255, 42, 124, 255),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${notelpController.text}',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const Text(
+                                            'No Telpon',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 137, 137, 137),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 32,
+                                      ),
+                                      const CircleAvatar(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 219, 233, 255),
+                                        child: Icon(
+                                          Icons.numbers_outlined,
+                                          color:
+                                              Color.fromARGB(255, 42, 124, 255),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${dateController.text}',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const Text(
+                                            'Tanggal Lahir',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 137, 137, 137),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 32,
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 219, 233, 255),
-                                  child: Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: Color.fromARGB(255, 42, 124, 255),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${notelpController.text}',
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(
-                                      'No Telpon',
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 137, 137, 137),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 32,
-                                ),
-                                const CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 219, 233, 255),
-                                  child: Icon(
-                                    Icons.numbers_outlined,
-                                    color: Color.fromARGB(255, 42, 124, 255),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${dateController.text}',
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Text(
-                                      'Tanggal Lahir',
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 137, 137, 137),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Akses',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'Akses',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilePage(),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                          orang: snapshot.data!,
+                        ),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-            ),
-            child: const Text(
-              'Edit',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        )
-
-        // CustomScrollView(
-        //   shrinkWrap: true,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   slivers: <Widget>[
-        //     SliverGrid(
-        //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //         crossAxisCount: 3,
-        //       ),
-        //       delegate: SliverChildBuilderDelegate(
-        //         (BuildContext context, int index) {
-        //           return Padding(
-        //             padding: const EdgeInsets.all(8),
-        //             child: GridTile(
-        //               child: Material(
-        //                 elevation: 5,
-        //                 shape: RoundedRectangleBorder(
-        //                   borderRadius: BorderRadius.circular(8.0),
-        //                 ),
-        //                 shadowColor: Colors.black.withOpacity(0.4),
-        //                 child: Container(
-        //                   child: Column(
-        //                     mainAxisAlignment: MainAxisAlignment.center,
-        //                     children: [
-        //                       Icon(
-        //                         widget.orang.hobi[index].icon,
-        //                         color: Theme.of(context).colorScheme.primary,
-        //                         size: 48,
-        //                       ),
-        //                       const SizedBox(
-        //                         height: 4,
-        //                       ),
-        //                       Text(
-        //                         widget.orang.hobi[index].nama,
-        //                       )
-        //                     ],
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           );
-        //         },
-        //         childCount: widget.orang.hobi.length,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-      ],
+              )
+            ],
+          );
+        } else {
+          return const Text('No Data');
+        }
+      },
     );
   }
 
@@ -313,6 +293,16 @@ class _ProfileItemState extends State<ProfileItem> {
         ),
       ));
 
+  Uint8List generateRandomImage() {
+    final random = Random();
+    final imageSize = 100; // Adjust the size as needed
+    final pixels = List<int>.generate(
+        imageSize * imageSize, (index) => random.nextInt(256));
+
+    final imageBytes = Uint8List.fromList(pixels);
+    return imageBytes;
+  }
+
   Widget profileImage() => Column(
         children: [
           CircleAvatar(
@@ -322,32 +312,54 @@ class _ProfileItemState extends State<ProfileItem> {
               padding: const EdgeInsets.all(8),
               child: CircleAvatar(
                 backgroundColor: Colors.grey.shade800,
-                backgroundImage: AssetImage(widget.orang.profile),
+                backgroundImage:
+                    MemoryImage(widget.orang.gambar), // Use random image
                 radius: double.infinity,
               ),
             ),
           ),
         ],
       );
-
   Future<void> ambilData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
-    setState(() {
-      usernameController.text = pref.getString('username') ?? '';
-    });
+    final id = pref.getInt('id');
 
-    final isiData = await _getData();
+    final isiData = await _getData(id!);
+
     if (isiData != null) {
-      usernameController.text = isiData['username'] ?? '';
-      emailController.text = isiData['email'] ?? '';
-      passwordController.text = isiData['password'] ?? '';
-      notelpController.text = isiData['notelp'] ?? '';
-      dateController.text = isiData['date'] ?? '';
+      setState(() {
+        usernameController.text = isiData['username'] ?? '';
+        emailController.text = isiData['email'] ?? '';
+        passwordController.text = isiData['password'] ?? '';
+        notelpController.text = isiData['notelp'] ?? '';
+        dateController.text = isiData['date'] ?? '';
+      });
     }
   }
 
-  Future<Map<String, dynamic>?> _getData() async {
-    return await SQLHelper.getUserByUsername(usernameController.text);
+  Future<Map<String, dynamic>?> _getData(int id) async {
+    return await SQLHelper.getUserById(id);
+  }
+
+  Future<Orang> _fetchUserData() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    int? userId = pref.getInt('id');
+
+    if (userId != null) {
+      final user = await SQLHelper.getUserById(userId);
+      final userFix = await SQLHelper.convertToOrang(user);
+
+      return userFix;
+    }
+
+    return Orang(
+        id: 1,
+        username: '',
+        email: '',
+        password: '',
+        noTelp: '',
+        date: '',
+        gambar: Uint8List(0));
   }
 }
