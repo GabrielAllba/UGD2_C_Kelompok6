@@ -200,6 +200,7 @@ class HomeScreenState extends State<HomeScreen> {
   // speech to text
 
   void _initSpeech() async {
+    print('adfasdfasdf');
     _speechEnabled = await _speechToText.initialize();
     setState(() {});
   }
