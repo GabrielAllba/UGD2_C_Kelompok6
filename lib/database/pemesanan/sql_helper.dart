@@ -11,7 +11,8 @@ class SQLHelper {
         harga_dasar INTEGER,
         harga INTEGER,
         tanggal_checkin TEXT, 
-        tanggal_checkout TEXT 
+        tanggal_checkout TEXT, 
+        qr_code TEXT
       ) 
     """);
   }
@@ -23,8 +24,14 @@ class SQLHelper {
     });
   }
 
-  static Future<int> addPemesanan(int id_user, String tipe_kamar, int harga,
-      int harga_dasar, String tanggal_checkin, String tanggal_checkout) async {
+  static Future<int> addPemesanan(
+      int id_user,
+      String tipe_kamar,
+      int harga,
+      int harga_dasar,
+      String tanggal_checkin,
+      String tanggal_checkout,
+      String qr_code) async {
     final db = await SQLHelper.db();
     final data = {
       'id_user': id_user,
@@ -32,9 +39,9 @@ class SQLHelper {
       'harga': harga,
       'harga_dasar': harga_dasar,
       'tanggal_checkin': tanggal_checkin,
-      'tanggal_checkout': tanggal_checkout
+      'tanggal_checkout': tanggal_checkout,
+      'qr_code': qr_code,
     };
-
     return await db.insert('pemesanan', data);
   }
 
@@ -100,8 +107,14 @@ class SQLHelper {
     }
   }
 
-  static Future<int> editPemesanan(int id, String tipe_kamar, int harga,
-      int harga_dasar, String tanggal_checkin, String tanggal_checkout) async {
+  static Future<int> editPemesanan(
+      int id,
+      String tipe_kamar,
+      int harga,
+      int harga_dasar,
+      String tanggal_checkin,
+      String tanggal_checkout,
+      String qr_code) async {
     final db = await SQLHelper.db();
 
     Duration difference = DateTime.parse(tanggal_checkout)
@@ -115,7 +128,8 @@ class SQLHelper {
       'harga': price,
       'harga_dasar': harga_dasar,
       'tanggal_checkin': tanggal_checkin,
-      'tanggal_checkout': tanggal_checkout
+      'tanggal_checkout': tanggal_checkout,
+      'qr_code': qr_code,
     };
 
     return await db.update('pemesanan', data, where: "id = $id");
@@ -135,5 +149,16 @@ class SQLHelper {
   static Future<int> deletePemesanan(int id) async {
     final db = await SQLHelper.db();
     return db.delete('pemesanan', where: "id = $id");
+  }
+
+  static Future<bool> isQRCodeExistsForUser(String parameter) async {
+    final pemesananData = await SQLHelper.getPemesanan();
+    for (Map<String, dynamic> data in pemesananData) {
+      final qrCode = data['qr_code'];
+      if (qrCode == parameter) {
+        return true;
+      }
+    }
+    return false;
   }
 }

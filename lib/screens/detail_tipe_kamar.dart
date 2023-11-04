@@ -452,6 +452,12 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
       widget.harga_dasar!,
       widget.checkin!,
       widget.checkout!,
+      generateQRData(price),
     );
+  }
+
+  String generateQRData(int harga) {
+    String reservationCode = harga.toString();
+    return reservationCode;
   }
 }

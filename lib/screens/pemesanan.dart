@@ -5,6 +5,7 @@ import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ugd2_c_kelompok6/screens/generate_qr/generate_qr_page.dart';
 
 class Pemesanan extends StatefulWidget {
   const Pemesanan({Key? key});
@@ -203,42 +204,39 @@ class _PemesananState extends State<Pemesanan> {
                             ],
                           ),
                         ),
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GenerateQRPage(
+                                        qrData: pemesanan['qr_code']),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6.0),
+                                ),
+                              ),
+                              child: const Text(
+                                "Tunjukan QR",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 );
               },
-            ),
-          ),
-
-          
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Tambahkan logika untuk check-in di sini
-                // Misalnya, menyimpan data check-in ke database atau melakukan operasi lainnya.
-                // Setelah selesai check-in, Anda mungkin ingin memanggil fungsi `refresh()` untuk memperbarui daftar pemesanan.
-                // refresh();
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Check-in Berhasil'),
-                      content: Text('Anda telah berhasil melakukan check-in.'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Tutup'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: Text('Check-in'),
             ),
           ),
         ],

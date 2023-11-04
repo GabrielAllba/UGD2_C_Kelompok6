@@ -9,12 +9,11 @@ import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/components/fasilitas_umum.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/screens/hasilCariNamaKamar.dart';
-import 'package:ugd2_c_kelompok6/screens/scan_qr_checkin/scan_qr_berhasil.dart';
+import 'package:ugd2_c_kelompok6/screens/qr_scan/scan_qr_page.dart';
 import 'package:ugd2_c_kelompok6/screens/search_kamar.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ugd2_c_kelompok6/database/search_history/sql_helper.dart';
-import 'package:ugd2_c_kelompok6/screens/scan_qr_checkin/scan_qr_berhasil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -601,7 +600,7 @@ class HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const CheckInScreen(),
+                  builder: (_) => const BarcodeScannerPageView(),
                 ),
               );
             },

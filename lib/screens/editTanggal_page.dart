@@ -140,7 +140,19 @@ class _InputPageState extends State<InputPage> {
     String formattedTanggalCheckout = DateFormat('yyyy-MM-dd')
         .format(DateTime.parse(controllerTanggalCheckout.text));
     final harga = SQLHelper.getPemesananById(id);
-    await SQLHelper.editPemesanan(id, widget.tipe_kamar, widget.harga,
-        widget.harga_dasar, formattedTanggalCheckin, formattedTanggalCheckout);
+    await SQLHelper.editPemesanan(
+      id,
+      widget.tipe_kamar,
+      widget.harga,
+      widget.harga_dasar,
+      formattedTanggalCheckin,
+      formattedTanggalCheckout,
+      generateQRData(widget.harga),
+    );
+  }
+
+  String generateQRData(int harga) {
+    String reservationCode = harga.toString();
+    return reservationCode;
   }
 }
