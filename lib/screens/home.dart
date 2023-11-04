@@ -9,10 +9,12 @@ import 'package:ugd2_c_kelompok6/components/elevated_card.dart';
 import 'package:ugd2_c_kelompok6/components/fasilitas_umum.dart';
 import 'package:intl/intl.dart';
 import 'package:ugd2_c_kelompok6/screens/hasilCariNamaKamar.dart';
+import 'package:ugd2_c_kelompok6/screens/scan_qr_checkin/scan_qr_berhasil.dart';
 import 'package:ugd2_c_kelompok6/screens/search_kamar.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ugd2_c_kelompok6/database/search_history/sql_helper.dart';
+import 'package:ugd2_c_kelompok6/screens/scan_qr_checkin/scan_qr_berhasil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -584,6 +586,31 @@ class HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+           Container(
+                  margin: EdgeInsets.symmetric(vertical: 12),
+                  child: Text(
+                    "Scan Your Check-in",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ElevatedButton(
+                 onPressed: () {
+                    Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                    builder: (_) => const CheckInScreen(),
+                       ),
+                      );
+                    },
+                    child: Text(
+                        "SCAN ME",
+                        style: const TextStyle(
+                        fontSize: 15,
+                        letterSpacing: 2,
+                        color: Colors.white,
+                        ),
+                      ),
+                    ),
           const Fasilitas(),
         ],
       ),
