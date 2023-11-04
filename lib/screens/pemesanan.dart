@@ -5,7 +5,6 @@ import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:ugd2_c_kelompok6/screens/hasilCariNamaKamar.dart';
 
 class Pemesanan extends StatefulWidget {
   const Pemesanan({Key? key});
@@ -209,6 +208,37 @@ class _PemesananState extends State<Pemesanan> {
                   ),
                 );
               },
+            ),
+          ),
+
+          
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Tambahkan logika untuk check-in di sini
+                // Misalnya, menyimpan data check-in ke database atau melakukan operasi lainnya.
+                // Setelah selesai check-in, Anda mungkin ingin memanggil fungsi `refresh()` untuk memperbarui daftar pemesanan.
+                // refresh();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Check-in Berhasil'),
+                      content: Text('Anda telah berhasil melakukan check-in.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Tutup'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Text('Check-in'),
             ),
           ),
         ],
