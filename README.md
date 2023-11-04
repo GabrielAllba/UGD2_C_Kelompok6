@@ -9,9 +9,7 @@
 - Rafael Billy Reznandya (210711297)
 
 ### Pembagian Tugas
-- Membuat halaman Register : Riel
-- Membuat  halaman Login untuk melakukan autentikasi user yang sudah dibuat sebelumnya : Robby
-- Memberi tanda saat register dan login berhasil/gagal : Riel
-- Membuat halaman Profile untuk user yang sedang login supaya user dapat memperbaharui data dirinya : Maharani
-- Membuat Create & Read : Billy
-- Membuat Update & Delete : Jenni
+- Membuat microphone untuk mencari kamar : Riel
+- Membuat  GPS atau Geolocator untuk menentukan lokasi user : Robby & Billy
+- Membuat Scan QR untuk check-in hotel : Jenni
+- Membuat camera untuk mengubah foto profil : Maharani
