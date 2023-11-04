@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:input_history_text_field/input_history_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,6 +54,61 @@ class HomeScreenState extends State<HomeScreen> {
       _checkin = '';
       _checkout = '';
     });
+  }
+
+  // Get Location
+  String strLatLong = '';
+  String strAlamat = 'Mencari lokasi...';
+  bool loading = false;
+
+  //getLatLong
+  Future<Position> _getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    //location service not enabled, don't continue
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location service Not Enabled');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permission denied');
+      }
+    }
+
+    //permission denied forever
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+        'Location permission denied forever, we cannot access',
+      );
+    }
+
+    //continue accessing the position of device
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+  }
+
+  //getAddress
+  Future<void> getAddressFromLongLat(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+
+    if (placemarks.isNotEmpty) {
+      Placemark place = placemarks[0];
+      setState(() {
+        strAlamat = '${place.street}';
+      });
+    } else {
+      setState(() {
+        strAlamat = 'Tidak dapat menemukan alamat';
+      });
+    }
   }
 
   void onTapCheckin() async {
@@ -358,8 +416,8 @@ class HomeScreenState extends State<HomeScreen> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Yuk Check In!',
@@ -367,6 +425,37 @@ class HomeScreenState extends State<HomeScreen> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+                InkWell(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        size: 24,
+                      ),
+                      if (strLatLong
+                          .isNotEmpty) // Menampilkan info lokasi jika sudah ada data
+                        Text(strAlamat),
+                      if (loading) // Menampilkan pesan loading jika sedang mencari lokasi
+                        Text('Mencari lokasi...'),
+                    ],
+                  ),
+                  onTap: () async {
+                    setState(() {
+                      loading = true;
+                    });
+
+                    Position position = await _getGeoLocationPosition();
+                    getAddressFromLongLat(position);
+
+                    setState(() {
+                      loading = false;
+                      strLatLong =
+                          '${position.latitude}, ${position.longitude}';
+                    });
+
+                    getAddressFromLongLat(position);
+                  },
                 ),
               ],
             ),
