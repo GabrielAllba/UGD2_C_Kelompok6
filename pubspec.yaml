@@ -24,6 +24,8 @@ dependencies:
     qr_code_scanner: ^1.0.1
     mobile_scanner: ^3.2.0
     qr_flutter: ^4.1.0
+    responsive_sizer: ^3.2.0
+    pdf: ^3.10.6
 
 dev_dependencies:
     flutter_lints: ^2.0.0
@@ -31,6 +33,24 @@ dev_dependencies:
         sdk: flutter
 
 flutter:
-    uses-material-design: true
     assets:
         - images/
+
+    fonts:
+        - family: Raleway
+          fonts:
+              - asset: fonts/Raleway-Regular.ttf
+              - asset: fonts/Raleway-Italic.ttf
+                style: italic
+        - family: Poppins
+          fonts:
+              - asset: fonts/Poppins-Regular.ttf
+              - asset: fonts/Poppins-Bold.ttf
+                weight: 700
+        - family: Helvetica
+          fonts:
+              - asset: fonts/Helvetica.ttf
+              - asset: fonts/Helvetica-Bold.ttf
+                weight: 700
+
+    uses-material-design: true
