@@ -11,7 +11,7 @@ dependencies:
         sdk: flutter
     flutter_slidable: ^0.6.0
     fluttertoast: ^8.2.2
-    google_fonts: ^6.0.0
+    google_fonts: ^6.1.0
     image_picker: ^1.0.4
     input_history_text_field: ^0.2.0
     intl: ^0.18.1
@@ -25,7 +25,8 @@ dependencies:
     mobile_scanner: ^3.2.0
     qr_flutter: ^4.1.0
     responsive_sizer: ^3.2.0
-    pdf: ^3.10.6
+    pdf: ^3.6.4
+    printing: ^5.9.0
 
 dev_dependencies:
     flutter_lints: ^2.0.0

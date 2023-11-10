@@ -6,6 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/button_pdf.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
+import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart' as usersql;
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -52,12 +53,23 @@ class _PemesananState extends State<Pemesanan> {
     });
   }
 
+  String username = '';
+  String notelp = '';
+  String email = '';
+
   Future<void> loadData() async {
+    Map<String, dynamic> userDetails =
+        await getUserDetailsFromSharedPreferences();
+
     int idUser = await getUserIdFromSharedPreferences();
     List<Map<String, dynamic>> pemesanan =
         await SQLHelper.getPemesananViaUser(idUser);
+
     setState(() {
       pemesananData = pemesanan;
+      username = userDetails['username'] ?? '';
+      notelp = userDetails['notelp'] ?? '';
+      email = userDetails['email'] ?? '';
     });
   }
 
@@ -261,14 +273,15 @@ class _PemesananState extends State<Pemesanan> {
                                 width: 8,
                               ),
                               ButtonPdf(
-                                  tipe: 'tipe',
-                                  checkin: pemesanan['tanggal_checkin'],
-                                  checkout: pemesanan['tanggal_checkout'],
-                                  harga_dasar: pemesanan['harga_dasar'],
-                                  harga: pemesanan['harga'],
-                                  username: 'username',
-                                  email: 'ASDFDSFSDA',
-                                  no_telpon: 'ADFDSF')
+                                tipe: pemesanan['tipe_kamar'],
+                                checkin: pemesanan['tanggal_checkin'],
+                                checkout: pemesanan['tanggal_checkout'],
+                                harga_dasar: pemesanan['harga_dasar'],
+                                harga: pemesanan['harga'],
+                                username: username,
+                                email: email,
+                                no_telpon: notelp,
+                              )
                             ],
                           ),
                         ],
@@ -299,5 +312,20 @@ class _PemesananState extends State<Pemesanan> {
   Future<void> deleteKamar(int id) async {
     await SQLHelper.deletePemesanan(id);
     refresh();
+  }
+
+  Future<Map<String, dynamic>> getUserDetailsFromSharedPreferences() async {
+    int userId = await getUserIdFromSharedPreferences();
+    Map<String, dynamic> user = await usersql.SQLHelper.getUserById(userId);
+
+    String username = user['username'] ?? '';
+    String notelp = user['notelp'] ?? '';
+    String email = user['email'] ?? '';
+
+    return {
+      'username': username,
+      'notelp': notelp,
+      'email': email,
+    };
   }
 }

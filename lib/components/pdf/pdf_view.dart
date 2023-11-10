@@ -4,9 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
+import 'package:pdf/widgets.dart';
+import 'package:printing/printing.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/custom_row_invoice.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/item_doc.dart';
+import 'package:ugd2_c_kelompok6/components/pdf/preview_screen.dart';
 
 Future<void> createPdf(
   String tipe,
@@ -70,6 +73,9 @@ Future<void> createPdf(
   ];
 
   pw.Widget table = itemColumn(elements);
+
+  final myFont = await PdfGoogleFonts.poppinsRegular();
+
   doc.addPage(
     pw.MultiPage(
       pageTheme: pdfTheme,
@@ -83,10 +89,10 @@ Future<void> createPdf(
               mainAxisAlignment: pw.MainAxisAlignment.center,
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
-                personalDataFromInput(username, email, no_telpon),
+                personalDataFromInput(username, email, no_telpon, myFont),
                 pw.SizedBox(height: 10.h),
                 pw.SizedBox(height: 5.h),
-                contentOfInvoice(table),
+                contentOfInvoice(table, myFont),
                 pw.SizedBox(height: 1.h),
               ],
             ),
@@ -96,8 +102,15 @@ Future<void> createPdf(
       footer: (pw.Context context) {
         return pw.Container(
             color: PdfColor.fromHex('#FFBD59'),
-            child: footerPDF(formattedDate));
+            child: footerPDF(formattedDate, myFont));
       },
+    ),
+  );
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PreviewScreen(doc: doc),
     ),
   );
 }
@@ -128,10 +141,7 @@ pw.Header headerPDF() {
 }
 
 pw.Padding personalDataFromInput(
-  String username,
-  String email,
-  String no_telpon,
-) {
+    String username, String email, String no_telpon, Font font) {
   return pw.Padding(
     padding: pw.EdgeInsets.symmetric(horizontal: 5.h, vertical: 1.h),
     child: pw.Table(
@@ -146,6 +156,7 @@ pw.Padding personalDataFromInput(
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10.sp,
+                  font: font,
                 ),
               ),
             ),
@@ -156,6 +167,7 @@ pw.Padding personalDataFromInput(
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10.sp,
+                  font: font,
                 ),
               ),
             ),
@@ -170,6 +182,7 @@ pw.Padding personalDataFromInput(
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10.sp,
+                  font: font,
                 ),
               ),
             ),
@@ -180,6 +193,7 @@ pw.Padding personalDataFromInput(
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10.sp,
+                  font: font,
                 ),
               ),
             ),
@@ -194,6 +208,7 @@ pw.Padding personalDataFromInput(
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10.sp,
+                  font: font,
                 ),
               ),
             ),
@@ -204,6 +219,7 @@ pw.Padding personalDataFromInput(
                 style: pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   fontSize: 10.sp,
+                  font: font,
                 ),
               ),
             ),
@@ -214,7 +230,7 @@ pw.Padding personalDataFromInput(
   );
 }
 
-pw.Padding topOfInvoice(pw.MemoryImage imageInvoice) {
+pw.Padding topOfInvoice(pw.MemoryImage imageInvoice, Font font) {
   return pw.Padding(
     padding: const pw.EdgeInsets.all(8.0),
     child: pw.Row(
@@ -236,34 +252,62 @@ pw.Padding topOfInvoice(pw.MemoryImage imageInvoice) {
               child: pw.GridView(
                 crossAxisCount: 2,
                 children: [
-                  pw.Text('Awesome Product',
-                      style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
-                  pw.Text('Anggrek Street 12',
-                      style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                  pw.Text(
+                    'Awesome Product',
+                    style: pw.TextStyle(
+                      fontSize: 10.sp,
+                      color: PdfColors.blue800,
+                      font: font,
+                    ),
+                  ),
+                  pw.Text(
+                    'Anggrek Street 12',
+                    style: pw.TextStyle(
+                      fontSize: 10.sp,
+                      color: PdfColors.blue800,
+                      font: font,
+                    ),
+                  ),
                   pw.SizedBox(height: 1.h),
                   pw.Text('Jakarta 5111',
                       style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                        fontSize: 10.sp,
+                        color: PdfColors.blue800,
+                        font: font,
+                      )),
                   pw.SizedBox(height: 1.h),
                   pw.SizedBox(height: 1.h),
                   pw.Text('Contact Us',
                       style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                        fontSize: 10.sp,
+                        color: PdfColors.blue800,
+                        font: font,
+                      )),
                   pw.SizedBox(height: 1.h),
                   pw.Text('Phone Number',
                       style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                        fontSize: 10.sp,
+                        color: PdfColors.blue800,
+                        font: font,
+                      )),
                   pw.Text('0812345678',
                       style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                        fontSize: 10.sp,
+                        color: PdfColors.blue800,
+                        font: font,
+                      )),
                   pw.Text('Email',
                       style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                        fontSize: 10.sp,
+                        color: PdfColors.blue800,
+                        font: font,
+                      )),
                   pw.Text('awesomeproduct@gmail.conm',
                       style: pw.TextStyle(
-                          fontSize: 10.sp, color: PdfColors.blue800)),
+                        fontSize: 10.sp,
+                        color: PdfColors.blue800,
+                        font: font,
+                      )),
                 ],
               ),
             ),
@@ -274,25 +318,37 @@ pw.Padding topOfInvoice(pw.MemoryImage imageInvoice) {
   );
 }
 
-pw.Padding contentOfInvoice(pw.Widget table) {
+pw.Padding contentOfInvoice(pw.Widget table, Font font) {
   return pw.Padding(
       padding: const pw.EdgeInsets.all(8.0),
       child: pw.Column(children: [
         pw.Text(
-            "Dear Customer, thank you for buying our product. we hope the products can make your day."),
+          "Dear Customer, thank you for buying our product. we hope the products can make your day.",
+          style: pw.TextStyle(font: font),
+        ),
         pw.SizedBox(height: 3.h),
         table,
-        pw.Text("Thanks for your trust, and till the next time."),
+        pw.Text(
+          "Thanks for your trust, and till the next time.",
+          style: pw.TextStyle(font: font),
+        ),
         pw.SizedBox(height: 3.h),
-        pw.Text("Kind regards,"),
+        pw.Text(
+          "Kind regards,",
+          style: pw.TextStyle(font: font),
+        ),
         pw.SizedBox(height: 3.h),
-        pw.Text("1150"),
+        pw.Text(
+          "1150",
+          style: pw.TextStyle(font: font),
+        ),
       ]));
 }
 
-pw.Center footerPDF(String formattedDate) => pw.Center(
+pw.Center footerPDF(String formattedDate, Font font) => pw.Center(
     child: pw.Text('Created At $formattedDate',
-        style: pw.TextStyle(fontSize: 10.sp, color: PdfColors.blue)));
+        style:
+            pw.TextStyle(fontSize: 10.sp, color: PdfColors.blue, font: font)));
 
 String _getMonthName(int month) {
   final List<String> monthNames = [
