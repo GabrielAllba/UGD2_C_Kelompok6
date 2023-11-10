@@ -11,10 +11,10 @@ class ButtonPdf extends StatefulWidget {
   final String checkout;
   final int harga_dasar;
   final int harga;
-
   final String username;
   final String email;
   final String no_telpon;
+  final String id;
 
   const ButtonPdf({
     Key? key,
@@ -26,6 +26,7 @@ class ButtonPdf extends StatefulWidget {
     required this.username,
     required this.email,
     required this.no_telpon,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -50,8 +51,10 @@ class _ButtonPdfState extends State<ButtonPdf> {
             widget.username,
             widget.email,
             widget.no_telpon,
+            widget.id,
             context,
           );
+
           setState(() {
             const uuid = Uuid();
             id = uuid.v1();

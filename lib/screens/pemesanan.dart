@@ -56,6 +56,7 @@ class _PemesananState extends State<Pemesanan> {
   String username = '';
   String notelp = '';
   String email = '';
+  String id = '';
 
   Future<void> loadData() async {
     Map<String, dynamic> userDetails =
@@ -281,6 +282,7 @@ class _PemesananState extends State<Pemesanan> {
                                 username: username,
                                 email: email,
                                 no_telpon: notelp,
+                                id: pemesanan['id'].toString(),
                               )
                             ],
                           ),

@@ -5,6 +5,7 @@ import 'package:ugd2_c_kelompok6/screens/register.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -52,7 +53,7 @@ class _LoginView extends State<LoginView> {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: SizedBox(
-                  width: 350,
+                  width: 350.w,
                   child: TextFormField(
                     controller: passwordController,
                     obscureText: !isPasswordVisible,
@@ -105,7 +106,7 @@ class _LoginView extends State<LoginView> {
                             timeInSecForIosWeb: 1,
                             backgroundColor: Colors.blue,
                             textColor: Colors.white,
-                            fontSize: 16.0,
+                            fontSize: 16.0.h,
                           );
                           await saveUserName(username);
                           await saveIdUser(user[0]['id']);
@@ -125,7 +126,7 @@ class _LoginView extends State<LoginView> {
                             context: context,
                             builder: (_) => AlertDialog(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: BorderRadius.circular(8.0.h),
                               ),
                               title: const Text('Password Salah'),
                               actions: <Widget>[

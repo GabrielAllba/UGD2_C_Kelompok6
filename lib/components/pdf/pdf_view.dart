@@ -10,6 +10,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/custom_row_invoice.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/item_doc.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/preview_screen.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 Future<void> createPdf(
   String tipe,
@@ -20,6 +21,7 @@ Future<void> createPdf(
   String username,
   String email,
   String no_telpon,
+  String id,
   BuildContext context,
 ) async {
   final now = DateTime.now();
@@ -80,7 +82,7 @@ Future<void> createPdf(
     pw.MultiPage(
       pageTheme: pdfTheme,
       header: (pw.Context context) {
-        return headerPDF();
+        return headerPDF(id);
       },
       build: (pw.Context context) {
         return [
@@ -94,6 +96,7 @@ Future<void> createPdf(
                 pw.SizedBox(height: 5.h),
                 contentOfInvoice(table, myFont),
                 pw.SizedBox(height: 1.h),
+                barcodeGaris(id),
               ],
             ),
           ),
@@ -115,7 +118,7 @@ Future<void> createPdf(
   );
 }
 
-pw.Header headerPDF() {
+pw.Header headerPDF(String id) {
   return pw.Header(
       margin: pw.EdgeInsets.zero,
       outlineColor: PdfColors.amber50,
@@ -131,7 +134,7 @@ pw.Header headerPDF() {
       ),
       child: pw.Center(
         child: pw.Text(
-          '-Modul 8 Library-',
+          'Invoice Pembayaran Kamar',
           style: pw.TextStyle(
             fontWeight: pw.FontWeight.bold,
             fontSize: 12.sp,
@@ -323,23 +326,23 @@ pw.Padding contentOfInvoice(pw.Widget table, Font font) {
       padding: const pw.EdgeInsets.all(8.0),
       child: pw.Column(children: [
         pw.Text(
-          "Dear Customer, thank you for buying our product. we hope the products can make your day.",
+          "Terima Kasih telah memilih kami! Berikut rincian pembayaran kamar hotel",
           style: pw.TextStyle(font: font),
         ),
         pw.SizedBox(height: 3.h),
         table,
         pw.Text(
-          "Thanks for your trust, and till the next time.",
+          "Terima Kasih",
           style: pw.TextStyle(font: font),
         ),
         pw.SizedBox(height: 3.h),
         pw.Text(
-          "Kind regards,",
+          "Hormat Kami,",
           style: pw.TextStyle(font: font),
         ),
         pw.SizedBox(height: 3.h),
         pw.Text(
-          "1150",
+          "Hotel Sahid Yogyakarta",
           style: pw.TextStyle(font: font),
         ),
       ]));
@@ -349,6 +352,17 @@ pw.Center footerPDF(String formattedDate, Font font) => pw.Center(
     child: pw.Text('Created At $formattedDate',
         style:
             pw.TextStyle(fontSize: 10.sp, color: PdfColors.blue, font: font)));
+
+pw.Container barcodeGaris(String id) {
+  return pw.Container(
+      child: pw.Padding(
+          padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
+          child: pw.BarcodeWidget(
+              barcode: Barcode.code128(escapes: true),
+              data: id,
+              width: 10.w,
+              height: 5.h)));
+}
 
 String _getMonthName(int month) {
   final List<String> monthNames = [
