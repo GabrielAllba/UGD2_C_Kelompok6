@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -14,7 +12,7 @@ class ButtonPdf extends StatefulWidget {
   final String username;
   final String email;
   final String no_telpon;
-  final String id;
+  final String id_pemesanan;
 
   const ButtonPdf({
     Key? key,
@@ -26,7 +24,7 @@ class ButtonPdf extends StatefulWidget {
     required this.username,
     required this.email,
     required this.no_telpon,
-    required this.id,
+    required this.id_pemesanan,
   }) : super(key: key);
 
   @override
@@ -34,7 +32,7 @@ class ButtonPdf extends StatefulWidget {
 }
 
 class _ButtonPdfState extends State<ButtonPdf> {
-  String id = const Uuid().v1();
+  String id_pemesanan = const Uuid().v1();
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +49,13 @@ class _ButtonPdfState extends State<ButtonPdf> {
             widget.username,
             widget.email,
             widget.no_telpon,
-            widget.id,
+            widget.id_pemesanan,
             context,
           );
 
           setState(() {
             const uuid = Uuid();
-            id = uuid.v1();
+            id_pemesanan = uuid.v1();
           });
         },
         style: ElevatedButton.styleFrom(

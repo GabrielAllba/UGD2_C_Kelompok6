@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -12,6 +10,7 @@ import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ugd2_c_kelompok6/screens/generate_qr/generate_qr_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:uuid/uuid.dart';
 
 class Pemesanan extends StatefulWidget {
   const Pemesanan({Key? key});
@@ -23,6 +22,7 @@ class Pemesanan extends StatefulWidget {
 class _PemesananState extends State<Pemesanan> {
   List<Map<String, dynamic>> pemesananData = [];
   int? id_user;
+  String id_pemesanan = const Uuid().v1();
 
   void refresh() async {
     final data = await SQLHelper.getPemesanan();
@@ -51,6 +51,8 @@ class _PemesananState extends State<Pemesanan> {
 
     setState(() {
       id_user = id;
+      const uuid = Uuid();
+      id_pemesanan = uuid.v1();
     });
   }
 
@@ -283,7 +285,8 @@ class _PemesananState extends State<Pemesanan> {
                                 username: username,
                                 email: email,
                                 no_telpon: notelp,
-                                id: pemesanan['id'].toString(),
+                                id_pemesanan:
+                                    pemesanan['id_pemesanan'].toString(),
                               )
                             ],
                           ),
