@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailImage extends StatelessWidget {
   const DetailImage({super.key, required this.image});
@@ -7,24 +8,29 @@ class DetailImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: Text('Detail Foto'),
-      ),
-      backgroundColor: Colors.black,
-      body: GestureDetector(
-        child: Center(
-          child: Hero(
-            tag: 'imageHero',
-            child: Image.asset(image),
+    return ResponsiveSizer(
+      builder: (context, orientation, screenType){
+
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            title: Text('Detail Foto'),
           ),
-        ),
-        onTap: () {
-          Navigator.pop(context);
-        },
-      ),
+          backgroundColor: Colors.black,
+          body: GestureDetector(
+            child: Center(
+              child: Hero(
+                tag: 'imageHero',
+                child: Image.asset(image),
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+        );
+     }
     );
   }
 }

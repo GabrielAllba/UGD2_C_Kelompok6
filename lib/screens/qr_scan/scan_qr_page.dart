@@ -6,6 +6,7 @@ import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart'
     as pemesananSqlHelper;
 import 'package:ugd2_c_kelompok6/screens/qr_scan/scanner_error_widget.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class BarcodeScannerPageView extends StatefulWidget {
   const BarcodeScannerPageView({super.key});
@@ -29,44 +30,49 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView>
   }
 
   Widget cameraView() {
-    return Builder(builder: (context) {
-      return Stack(
-        children: [
-          MobileScanner(
-            startDelay: true,
-            controller: MobileScannerController(torchEnabled: false),
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, child) {
-              return ScannerErrorWidget(error: error);
-            },
-            onDetect: (capture) => setBarcodeCapture(capture),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              height: 100,
-              color: Colors.black.withOpacity(0.4),
-              child: Row(
-                children: [
-                  Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width - 120,
-                      height: 50,
-                      child: FittedBox(
-                        child: GestureDetector(
-                            onTap: () => getURLResult(),
-                            child: barcodeCaptureTextResult(context)),
-                      ),
-                    ),
-                  )
-                ],
+    return ResponsiveSizer(
+      builder: (context, orientation, screenType){
+
+        return Builder(builder: (context) {
+          return Stack(
+            children: [
+              MobileScanner(
+                startDelay: true,
+                controller: MobileScannerController(torchEnabled: false),
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, child) {
+                  return ScannerErrorWidget(error: error);
+                },
+                onDetect: (capture) => setBarcodeCapture(capture),
               ),
-            ),
-          ),
-        ],
-      );
-    });
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  height: 100,
+                  color: Colors.black.withOpacity(0.4),
+                  child: Row(
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 120,
+                          height: 50,
+                          child: FittedBox(
+                            child: GestureDetector(
+                                onTap: () => getURLResult(),
+                                child: barcodeCaptureTextResult(context)),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+      }
+    );
   }
 
   Text barcodeCaptureTextResult(BuildContext context) {

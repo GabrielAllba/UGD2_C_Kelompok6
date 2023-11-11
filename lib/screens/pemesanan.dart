@@ -11,6 +11,7 @@ import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ugd2_c_kelompok6/screens/generate_qr/generate_qr_page.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Pemesanan extends StatefulWidget {
   const Pemesanan({Key? key});
