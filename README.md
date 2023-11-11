@@ -12,5 +12,5 @@
 - Membuat create PDF & printing : Riel
 - Membuat image picker : Robby
 - Membuat UUID & PDF : Billy
-- Membuat resposive siezer & INTL : Jenni
+- Membuat resposive siezer & INTL : Jennia
 - Membuat barcode widget : Maharani
