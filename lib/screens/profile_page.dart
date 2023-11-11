@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
-       Device.orientation == Orientation.portrait
+      Device.orientation == Orientation.portrait
         ? Container(
         width: 100.w,
         height: 20.5.h,

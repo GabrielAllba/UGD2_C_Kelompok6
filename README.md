@@ -9,7 +9,8 @@
 - Rafael Billy Reznandya (210711297)
 
 ### Pembagian Tugas
-- Membuat microphone untuk mencari kamar : Riel
-- Membuat  GPS atau Geolocator untuk menentukan lokasi user : Robby & Billy
-- Membuat Scan QR untuk check-in hotel : Jenni
-- Membuat camera untuk mengubah foto profil : Maharani
+- Membuat create PDF & printing : Riel
+- Membuat image picker : Robby
+- Membuat UUID & PDF : Billy
+- Membuat resposive siezer & INTL : Jenni
+- Membuat barcode widget : Maharani
