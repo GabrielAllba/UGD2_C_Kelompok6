@@ -97,6 +97,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
+                                      getFromGallery();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Ambil Dari galery'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
                                       getFromCamera();
                                       Navigator.of(context).pop();
                                     },
@@ -248,6 +255,22 @@ class _ProfilePageState extends State<ProfilePage> {
   getFromCamera() async {
     final pickedFile = await imagePicker.pickImage(
       source: ImageSource.camera,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    if (pickedFile != null) {
+      Uint8List imageBytes = await pickedFile.readAsBytes();
+
+      setState(() {
+        imageFile = imageBytes;
+        imageKey = UniqueKey();
+      });
+    }
+  }
+
+  getFromGallery() async {
+    final pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
       maxWidth: 1800,
       maxHeight: 1800,
     );
