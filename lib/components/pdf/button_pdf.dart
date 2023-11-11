@@ -32,7 +32,7 @@ class ButtonPdf extends StatefulWidget {
 }
 
 class _ButtonPdfState extends State<ButtonPdf> {
-  String id_pemesanan = const Uuid().v1();
+  String idPemesanan = const Uuid().v1();
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +49,13 @@ class _ButtonPdfState extends State<ButtonPdf> {
             widget.username,
             widget.email,
             widget.no_telpon,
-            widget.id_pemesanan,
+            idPemesanan,
             context,
           );
 
           setState(() {
             const uuid = Uuid();
-            id_pemesanan = uuid.v1();
+            idPemesanan = uuid.v1();
           });
         },
         style: ElevatedButton.styleFrom(

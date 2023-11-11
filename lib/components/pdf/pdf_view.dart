@@ -367,8 +367,8 @@ pw.Container barcodeGaris(String id_pemesanan) {
           child: pw.BarcodeWidget(
               barcode: Barcode.code128(escapes: true),
               data: id_pemesanan,
-              width: 10.w,
-              height: 5.h)));
+              width: 20.w,
+              height: 10.h)));
 }
 
 String _getMonthName(int month) {
