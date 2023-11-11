@@ -18,6 +18,12 @@ pw.Widget itemColumn(List<CustomRow> elements) {
             alignment: pw.Alignment.center,
             padding: const pw.EdgeInsets.all(5),
             color: rowColor,
+            child: pw.Text(element.tipe_kamar),
+          ),
+          pw.Container(
+            alignment: pw.Alignment.center,
+            padding: const pw.EdgeInsets.all(5),
+            color: rowColor,
             child: pw.Text(element.tanggal),
           ),
           pw.Container(

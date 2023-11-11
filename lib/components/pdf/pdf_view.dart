@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -13,7 +12,7 @@ import 'package:ugd2_c_kelompok6/components/pdf/preview_screen.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
 Future<void> createPdf(
-  String tipe,
+  String tipe_kamar,
   String checkin,
   String checkout,
   String harga_dasar,
@@ -21,7 +20,7 @@ Future<void> createPdf(
   String username,
   String email,
   String no_telpon,
-  String id,
+  String id_pemesanan,
   BuildContext context,
 ) async {
   final now = DateTime.now();
@@ -46,28 +45,35 @@ Future<void> createPdf(
 
   List<String> dateList = [];
 
-  for (DateTime date = checkinDate;
-      date.isBefore(checkoutDate) || date.isAtSameMomentAs(checkoutDate);
-      date = date.add(Duration(days: 1))) {
-    String formattedDate =
-        "${date.day} ${_getMonthName(date.month)} ${date.year}";
-    dateList.add(formattedDate);
+  int nights = checkoutDate.difference(checkinDate).inDays;
+
+  for (int i = 0; i <= nights; i++) {
+    DateTime currentDate = checkinDate.add(Duration(days: i));
   }
 
-  // Print the list
+  String _getFormattedDate(DateTime date) {
+    return "${date.day} ${_getMonthName(date.month)} ${date.year}";
+  }
+
+  String formattedCheckinCheckout =
+      "${_getFormattedDate(checkinDate)} - ${_getFormattedDate(checkoutDate)}";
+  dateList.add(formattedCheckinCheckout);
+
+// Print the list
   dateList.forEach((date) => print(date));
 
   // Add the checkout date to the list
-  dateList.add(checkout);
   final List<CustomRow> elements = [
-    CustomRow("Tanggal", "Jumlah", "Harga"),
+    CustomRow("Tipe Kamar", "Tanggal", "Jumlah", "Harga"),
     for (var product in dateList)
       CustomRow(
+        tipe_kamar,
         product.toString(),
-        '1',
+        nights > 0 ? nights.toString() : '1',
         harga_dasar.toString(),
       ),
     CustomRow(
+      "",
       "Total",
       "",
       "Rp ${harga}",
@@ -82,7 +88,7 @@ Future<void> createPdf(
     pw.MultiPage(
       pageTheme: pdfTheme,
       header: (pw.Context context) {
-        return headerPDF(id);
+        return headerPDF(id_pemesanan);
       },
       build: (pw.Context context) {
         return [
@@ -96,7 +102,7 @@ Future<void> createPdf(
                 pw.SizedBox(height: 5.h),
                 contentOfInvoice(table, myFont),
                 pw.SizedBox(height: 1.h),
-                barcodeGaris(id),
+                barcodeGaris(id_pemesanan),
               ],
             ),
           ),
@@ -331,6 +337,7 @@ pw.Padding contentOfInvoice(pw.Widget table, Font font) {
         ),
         pw.SizedBox(height: 3.h),
         table,
+        pw.SizedBox(height: 3.h),
         pw.Text(
           "Terima Kasih",
           style: pw.TextStyle(font: font),
@@ -353,13 +360,13 @@ pw.Center footerPDF(String formattedDate, Font font) => pw.Center(
         style:
             pw.TextStyle(fontSize: 10.sp, color: PdfColors.blue, font: font)));
 
-pw.Container barcodeGaris(String id) {
+pw.Container barcodeGaris(String id_pemesanan) {
   return pw.Container(
       child: pw.Padding(
           padding: pw.EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.h),
           child: pw.BarcodeWidget(
               barcode: Barcode.code128(escapes: true),
-              data: id,
+              data: id_pemesanan,
               width: 10.w,
               height: 5.h)));
 }
