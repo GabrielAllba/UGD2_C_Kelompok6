@@ -82,6 +82,7 @@ class _PemesananState extends State<Pemesanan> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, deviceType) {
+      
       Device.orientation == Orientation.portrait
           ? Container(
               width: 100.w,

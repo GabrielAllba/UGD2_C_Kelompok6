@@ -35,6 +35,28 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
   Widget build(BuildContext context) {
     return ResponsiveSizer(
       builder: (context, orientation, screenType){
+         Device.orientation == Orientation.portrait
+        ? Container(
+        width: 100.w,
+        height: 20.5.h,
+      )
+
+      : Container(
+        width: 100.w,
+        height: 12.5.h,
+      );
+
+      Device.screenType == ScreenType.tablet
+        ? Container(
+      width: 100.w,
+      height: 20.5.h,
+      )
+
+      : Container(
+        width: 100.w,
+        height: 12.5.h,
+      );
+
         final _formKey = GlobalKey<FormState>();
         return Scaffold(
           appBar: AppBar(
@@ -47,7 +69,7 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 250,
+                  height: 250.h,
                   child: Stack(
                     alignment: Alignment.centerLeft,
                     children: [
@@ -214,7 +236,7 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: SizedBox(
-                    height: 1,
+                    height: 1.h,
                     width: double.infinity,
                     child: Container(
                       decoration: BoxDecoration(
@@ -349,7 +371,7 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: SizedBox(
-                    height: 1,
+                    height: 1.h,
                     width: double.infinity,
                     child: Container(
                       decoration: BoxDecoration(
@@ -359,7 +381,7 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                   ),
                 ),
                 SizedBox(
-                  height: 24,
+                  height: 24.h,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -369,7 +391,7 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                   ),
                 ),
                 SizedBox(
-                  height: 24,
+                  height: 24.h,
                 ),
               ],
             ),

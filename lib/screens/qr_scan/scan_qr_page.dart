@@ -32,6 +32,27 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView>
   Widget cameraView() {
     return ResponsiveSizer(
       builder: (context, orientation, screenType){
+         Device.orientation == Orientation.portrait
+        ? Container(
+        width: 100.w,
+        height: 20.5.h,
+      )
+
+      : Container(
+        width: 100.w,
+        height: 12.5.h,
+      );
+
+      Device.screenType == ScreenType.tablet
+        ? Container(
+      width: 100.w,
+      height: 20.5.h,
+      )
+
+      : Container(
+        width: 100.w,
+        height: 12.5.h,
+      );
 
         return Builder(builder: (context) {
           return Stack(
@@ -49,14 +70,14 @@ class _BarcodeScannerPageViewState extends State<BarcodeScannerPageView>
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  height: 100,
+                  height: 100.h,
                   color: Colors.black.withOpacity(0.4),
                   child: Row(
                     children: [
                       Center(
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width - 120,
-                          height: 50,
+                          height: 50.h,
                           child: FittedBox(
                             child: GestureDetector(
                                 onTap: () => getURLResult(),
