@@ -156,19 +156,19 @@ class _PemesananState extends State<Pemesanan> {
                         icon: Icons.update,
                         onTap: () async {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => InputPage(
-                                  title: 'Edit Tanggal',
-                                  id: pemesanan['id'],
-                                  tanggal_checkin: pemesanan['tanggal_checkin'],
-                                  tanggal_checkout:
-                                      pemesanan['tanggal_checkout'],
-                                  tipe_kamar: pemesanan['tipe_kamar'],
-                                  harga: pemesanan['harga'],
-                                  harga_dasar: pemesanan['harga_dasar'],
-                                ),
-                              )).then((_) => refresh());
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InputPage(
+                                title: 'Edit Tanggal',
+                                id: pemesanan['id'],
+                                tanggal_checkin: pemesanan['tanggal_checkin'],
+                                tanggal_checkout: pemesanan['tanggal_checkout'],
+                                tipe_kamar: pemesanan['tipe_kamar'],
+                                harga: pemesanan['harga'],
+                                harga_dasar: pemesanan['harga_dasar'],
+                              ),
+                            ),
+                          );
                         },
                       ),
                       IconSlideAction(
