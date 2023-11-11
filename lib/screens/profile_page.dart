@@ -8,6 +8,7 @@ import 'package:ugd2_c_kelompok6/screens/profile.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key, required this.orang});
@@ -52,149 +53,153 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile User'), // Judul AppBar
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Profile(),
-              ),
-            );
-          },
-        ),
-      ),
-      body: FutureBuilder(
-        future: _fetchUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            return SingleChildScrollView(
-              child: SafeArea(
-                child: Form(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Action on CircleAvatar Tap'),
-                                content: Text('You tapped the avatar!'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      getFromCamera();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('Ambil Dari kamera'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: imageFile == null
-                                ? MemoryImage(snapshot.data!.gambar)
-                                : MemoryImage(imageFile!),
-                            child: const Align(
-                              alignment: Alignment.bottomRight,
-                              child: CircleAvatar(
-                                radius: 15,
-                                backgroundColor: Colors.blue,
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: 18,
-                                ),
-                              ),
-                            )
-                            // Hide edit icon when not editing
-                            ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      TextFormField(
-                        controller: usernameController,
-                        enabled: false,
-                        decoration: const InputDecoration(
-                          labelText: "Username",
-                          prefixIcon: Icon(Icons.person),
-                        ),
-                      ),
-                      TextFormField(
-                          controller: passwordController,
-                          decoration: const InputDecoration(
-                            labelText: "Password",
-                            prefixIcon: Icon(Icons.password),
-                          )),
-                      TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                            labelText: "Email",
-                            prefixIcon: Icon(Icons.email),
-                          )),
-                      TextFormField(
-                        controller: notelpController,
-                        decoration: const InputDecoration(
-                          labelText: "Nomor Telepon",
-                          prefixIcon: Icon(Icons.phone_android),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Column(
+    return ResponsiveSizer(
+      builder: (context, orientation, screenType){
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Profile User'), // Judul AppBar
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Profile(),
+                  ),
+                );
+              },
+            ),
+          ),
+          body: FutureBuilder(
+            future: _fetchUserData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                return SingleChildScrollView(
+                  child: SafeArea(
+                    child: Form(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              updateData();
-                              Fluttertoast.showToast(
-                                msg: "Berhasil Update Data",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.TOP,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.blue,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Action on CircleAvatar Tap'),
+                                    content: Text('You tapped the avatar!'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          getFromCamera();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Ambil Dari kamera'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
-                            child: const Text(
-                              "Update",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                            child: CircleAvatar(
+                                radius: 50,
+                                backgroundImage: imageFile == null
+                                    ? MemoryImage(snapshot.data!.gambar)
+                                    : MemoryImage(imageFile!),
+                                child: const Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.blue,
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                )
+                                // Hide edit icon when not editing
+                                ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          TextFormField(
+                            controller: usernameController,
+                            enabled: false,
+                            decoration: const InputDecoration(
+                              labelText: "Username",
+                              prefixIcon: Icon(Icons.person),
                             ),
                           ),
+                          TextFormField(
+                              controller: passwordController,
+                              decoration: const InputDecoration(
+                                labelText: "Password",
+                                prefixIcon: Icon(Icons.password),
+                              )),
+                          TextFormField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                labelText: "Email",
+                                prefixIcon: Icon(Icons.email),
+                              )),
+                          TextFormField(
+                            controller: notelpController,
+                            decoration: const InputDecoration(
+                              labelText: "Nomor Telepon",
+                              prefixIcon: Icon(Icons.phone_android),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  updateData();
+                                  Fluttertoast.showToast(
+                                    msg: "Berhasil Update Data",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.blue,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                },
+                                child: const Text(
+                                  "Update",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          } else {
-            return const Text('No Data');
-          }
-        },
-      ),
+                );
+              } else {
+                return const Text('No Data');
+              }
+            },
+          ),
+        );
+      }
     );
   }
 

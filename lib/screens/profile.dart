@@ -4,6 +4,7 @@ import 'package:ugd2_c_kelompok6/models/kelompok.dart';
 import 'package:ugd2_c_kelompok6/screens/profile_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Profile extends StatefulWidget {
   const Profile({
@@ -25,27 +26,31 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text('Profile'),
-        ),
-        body: FutureBuilder<Orang>(
-          future: _fetchUserData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              return ProfileItem(orang: snapshot.data!);
-            } else {
-              return const Text('No Data');
-            }
-          },
-        ),
-      ),
+    return ResponsiveSizer(
+      builder: (context, orientation, screenType){
+        return MaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              title: const Text('Profile'),
+            ),
+            body: FutureBuilder<Orang>(
+              future: _fetchUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  return ProfileItem(orang: snapshot.data!);
+                } else {
+                  return const Text('No Data');
+                }
+              },
+            ),
+          ),
+       );
+      }
     );
   }
 
