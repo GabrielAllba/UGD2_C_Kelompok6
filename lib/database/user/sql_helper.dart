@@ -75,6 +75,12 @@ class SQLHelper {
     return db.query('user', where: 'username = ?', whereArgs: [username]);
   }
 
+  static Future<List<Map<String, dynamic>>> getEmailViaUser(
+      String email) async {
+    final db = await SQLHelper.db();
+    return db.query('user', where: 'email = ?', whereArgs: [email]);
+  }
+
   static Future<Map<String, dynamic>> getUserById(int id) async {
     final db = await SQLHelper.db();
     final List<Map<String, dynamic>> result = await db.query(

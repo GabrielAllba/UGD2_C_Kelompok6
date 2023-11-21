@@ -19,7 +19,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginView extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   bool isPasswordVisible = false;
@@ -53,27 +53,25 @@ class _LoginView extends State<LoginView> {
     Map? dataForm = widget.data;
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
-         Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
+        Device.orientation == Orientation.portrait
+            ? Container(
+                width: 100.w,
+                height: 20.5.h,
+              )
+            : Container(
+                width: 100.w,
+                height: 12.5.h,
+              );
 
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
-
-      Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+        Device.screenType == ScreenType.tablet
+            ? Container(
+                width: 100.w,
+                height: 20.5.h,
+              )
+            : Container(
+                width: 100.w,
+                height: 12.5.h,
+              );
         return Scaffold(
           body: SafeArea(
             child: Form(
@@ -88,9 +86,9 @@ class _LoginView extends State<LoginView> {
                       }
                       return null;
                     },
-                    controller: usernameController,
-                    hintTxt: "Username",
-                    helperTxt: "Inputkan User yang telah didaftar",
+                    controller: emailController,
+                    hintTxt: "Email",
+                    helperTxt: "Inputkan Email yang telah didaftar",
                     iconData: Icons.person,
                   ),
                   //* Password
@@ -133,67 +131,13 @@ class _LoginView extends State<LoginView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            String username = usernameController.text;
-                            String password = passwordController.text;
-
-                            List<Map<String, dynamic>> user =
-                                await SQLHelper.getViaUser(username);
-                            if (user.isNotEmpty &&
-                                user[0]['password'] == password) {
-                              Fluttertoast.showToast(
-                                  msg: "Berhasil Login",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.TOP,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.blue,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                              await saveUserName(username);
-                              await saveIdUser(user[0]['id']);
-
-                              await Future.delayed(
-                                Duration(seconds: 2),
-                              );
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const TabsScreen(),
-                                ),
-                              );
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0.h),
-                                  ),
-                                  title: const Text('Password Salah'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'cancel'),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'OK'),
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          }
-                        },
+                        onPressed: () async {},
                         child: const Text('Login'),
                       ),
                       TextButton(
                         onPressed: () {
                           Map<String, dynamic> formData = {};
-                          formData['username'] = usernameController.text;
+                          formData['email'] = emailController.text;
                           formData['password'] = passwordController.text;
                           pushRegister(context);
                         },
