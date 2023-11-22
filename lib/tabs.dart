@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/screens/home.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
 import 'package:ugd2_c_kelompok6/screens/profile.dart';
@@ -14,40 +15,43 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   int _selectedPageIndex = 0;
-
+  int? idUser;
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
   }
 
+  Future<void> getIdUser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      idUser = pref.getInt('id')!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(
-      
-      builder: (context, orientation, screenType){
-         Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+    return ResponsiveSizer(builder: (context, orientation, screenType) {
+      Device.orientation == Orientation.portrait
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
       Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
-      
       Widget activePage = const HomeScreen();
 
       if (_selectedPageIndex == 0) {
@@ -55,7 +59,9 @@ class _TabsScreenState extends State<TabsScreen> {
       } else if (_selectedPageIndex == 1) {
         activePage = const Pemesanan();
       } else if (_selectedPageIndex == 2) {
-        activePage = const Profile();
+        activePage = Profile(
+          id: 4,
+        );
       }
 
       return Scaffold(
@@ -80,7 +86,6 @@ class _TabsScreenState extends State<TabsScreen> {
           ],
         ),
       );
-      }
-    );
+    });
   }
 }

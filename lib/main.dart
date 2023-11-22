@@ -4,9 +4,10 @@ import 'package:ugd2_c_kelompok6/login.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(ProviderScope(child: const MainApp()));
 }
 
 final theme = ThemeData(
@@ -23,30 +24,28 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return ResponsiveSizer(
       builder: (context, orientation, deviceType) {
-         Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
+        Device.orientation == Orientation.portrait
+            ? Container(
+                width: 100.w,
+                height: 20.5.h,
+              )
+            : Container(
+                width: 100.w,
+                height: 12.5.h,
+              );
 
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
-
-      Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+        Device.screenType == ScreenType.tablet
+            ? Container(
+                width: 100.w,
+                height: 20.5.h,
+              )
+            : Container(
+                width: 100.w,
+                height: 12.5.h,
+              );
         return MaterialApp(
           theme: theme,
           home: const LoginView(),

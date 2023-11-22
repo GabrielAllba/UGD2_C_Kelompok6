@@ -28,6 +28,8 @@ dependencies:
     pdf: ^3.6.4
     printing: ^5.9.0
     barcode_widget: ^2.0.4
+    http: ^1.1.0
+    flutter_riverpod: ^2.4.8
 
 dev_dependencies:
     flutter_lints: ^2.0.0

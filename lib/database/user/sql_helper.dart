@@ -93,7 +93,7 @@ class SQLHelper {
   }
 
   static Future<int> editUser(int id, String username, String password,
-      String email, String notelp, String date, Uint8List gambar) async {
+      String email, String notelp, String date) async {
     final db = await SQLHelper.db();
     final data = {
       'username': username,
@@ -101,7 +101,6 @@ class SQLHelper {
       'email': email,
       'notelp': notelp,
       'date': date,
-      'gambar': gambar
     };
 
     return await db.update('user', data, where: "id = $id");
@@ -151,7 +150,6 @@ class SQLHelper {
       password: password,
       noTelp: notelp,
       date: date,
-      gambar: gambar,
     );
   }
 }

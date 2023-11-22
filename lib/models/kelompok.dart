@@ -11,7 +11,6 @@ class Orang {
     required this.password,
     required this.noTelp,
     required this.date,
-    required this.gambar,
   });
   final int id;
   final String username;
@@ -19,5 +18,4 @@ class Orang {
   final String password;
   final String noTelp;
   final String date;
-  final Uint8List gambar;
 }

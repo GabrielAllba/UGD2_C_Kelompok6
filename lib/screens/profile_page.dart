@@ -51,30 +51,35 @@ class _ProfilePageState extends State<ProfilePage> {
     setData();
   }
 
+  Future<void> getIdUser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      idUser = pref.getInt('id')!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
       Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
       Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
       return Scaffold(
         appBar: AppBar(
           title: const Text('Profile User'), // Judul AppBar
@@ -85,7 +90,9 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Profile(),
+                  builder: (context) => Profile(
+                    id: idUser!,
+                  ),
                 ),
               );
             },
@@ -137,25 +144,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             );
                           },
-                          child: CircleAvatar(
-                              radius: 50,
-                              backgroundImage: imageFile == null
-                                  ? MemoryImage(snapshot.data!.gambar)
-                                  : MemoryImage(imageFile!),
-                              child: const Align(
-                                alignment: Alignment.bottomRight,
-                                child: CircleAvatar(
-                                  radius: 15,
-                                  backgroundColor: Colors.blue,
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                ),
-                              )
-                              // Hide edit icon when not editing
-                              ),
                         ),
                         const SizedBox(
                           height: 16,
@@ -247,13 +235,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> getIdUser() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
-      idUser = pref.getInt('id');
-    });
-  }
-
   Future<Map<String, dynamic>?> _getData() async {
     return await SQLHelper.getUserById(idUser!);
   }
@@ -263,17 +244,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final id = pref.getInt('id');
 
-    Uint8List? gambar = imageFile ?? widget.orang.gambar;
+    // Uint8List? gambar = imageFile ?? widget.orang.gambar;
 
     print(notelpController.text);
     await SQLHelper.editUser(
-        id!,
-        usernameController.text,
-        passwordController.text,
-        emailController.text,
-        notelpController.text,
-        widget.orang.date,
-        gambar);
+      id!,
+      usernameController.text,
+      passwordController.text,
+      emailController.text,
+      notelpController.text,
+      widget.orang.date,
+    );
   }
 
   getFromCamera() async {
@@ -320,12 +301,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
     // Return a default Orang if the user data is not available.
     return Orang(
-        id: 1,
-        username: '',
-        email: '',
-        password: '',
-        noTelp: '',
-        date: '',
-        gambar: Uint8List(0));
+      id: 1,
+      username: '',
+      email: '',
+      password: '',
+      noTelp: '',
+      date: '',
+    );
   }
 }

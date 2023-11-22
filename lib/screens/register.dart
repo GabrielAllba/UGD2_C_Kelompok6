@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
+import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:intl/intl.dart';
+import 'package:ugd2_c_kelompok6/entity/User.dart';
 import 'package:ugd2_c_kelompok6/login.dart';
 import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,6 +22,13 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   String _tanggal = '';
+  User user = User(
+    username: '',
+    password: '',
+    email: '',
+    no_telp: '',
+    tgl_lahir: '',
+  );
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,8 +47,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   Future<void> loadImageFromAssets() async {
     try {
-      final ByteData data = await rootBundle
-          .load('images/robby.jpg'); // Replace with your asset path
+      final ByteData data = await rootBundle.load('images/robby.jpg');
       imageBytes = data.buffer.asUint8List();
       setState(() {});
     } catch (e) {
@@ -110,31 +120,50 @@ class _RegisterViewState extends State<RegisterView> {
     }
   }
 
+  void updateUserModel() {
+    setState(() {
+      user = User(
+        username: usernameController.text,
+        password: passwordController.text,
+        email: emailController.text,
+        no_telp: notelpController.text,
+        tgl_lahir: dateController.text,
+      );
+    });
+  }
+
+  Future<void> register() async {
+    try {
+      await AuthClient.register(user);
+      print('berhasil lewat');
+    } catch (err) {
+      Navigator.pop(context);
+      print(err);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(
-      builder: (context, orientation, screenType){
-         Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+    return ResponsiveSizer(builder: (context, orientation, screenType) {
+      Device.orientation == Orientation.portrait
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
       Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
       return Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(
@@ -229,67 +258,9 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate() &&
-                              _tanggal.isNotEmpty) {
-                            if (await SQLHelper.isUsernameExists(
-                                    usernameController.text) ==
-                                true) {
-                              Fluttertoast.showToast(
-                                msg: "Username sudah digunakan orang lain!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.TOP,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.blue,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                            } else if (await SQLHelper.isEmailExists(
-                                    emailController.text) ==
-                                true) {
-                              Fluttertoast.showToast(
-                                msg: "Email sudah digunakan oleh orang lain!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.TOP,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.blue,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                            } else {
-                              Map<String, dynamic> formData = {};
-                              formData['username'] = usernameController.text;
-                              formData['password'] = passwordController.text;
-
-                              await addUser();
-
-                              Fluttertoast.showToast(
-                                msg: "Berhasil Register",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.TOP,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.blue,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-
-                              await Future.delayed(
-                                Duration(seconds: 2),
-                              );
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => LoginView(
-                                    data: formData,
-                                  ),
-                                ),
-                              );
-                            }
-
-                            if (_tanggal.isEmpty) {
-                              _showMyDialog();
-                            }
-                          }
+                          updateUserModel();
+                          await register();
+                          print('asdfasdfasdfasdfadsfasdf');
                         },
                         child: const Text('Register'),
                       ),
@@ -321,24 +292,6 @@ class _RegisterViewState extends State<RegisterView> {
           ),
         ),
       );
-      }
-    );
-  }
-
-  Future<void> addUser() async {
-    print('asdfasdfadsf');
-    print(usernameController.text);
-    print(passwordController.text);
-    print(emailController.text);
-    print(notelpController.text);
-    print(dateController.text);
-    print(imageBytes);
-    await SQLHelper.addUser(
-        usernameController.text,
-        passwordController.text,
-        emailController.text,
-        notelpController.text,
-        dateController.text,
-        imageBytes!);
+    });
   }
 }
