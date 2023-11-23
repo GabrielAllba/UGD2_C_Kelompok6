@@ -1,91 +1,137 @@
 import 'package:flutter/material.dart';
+import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 import 'package:ugd2_c_kelompok6/entity/User.dart';
 
-class ItemProfile extends StatelessWidget {
-  User? user;
+class ItemProfile extends StatefulWidget {
+  const ItemProfile({super.key, required this.id});
 
-  ItemProfile({super.key, this.user});
+  final int id;
+
+  @override
+  State<ItemProfile> createState() => _ItemProfileState();
+}
+
+class _ItemProfileState extends State<ItemProfile> {
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final tanggalLahirController = TextEditingController();
+  final nomorTeleponController = TextEditingController();
+
+  bool isLoading = false;
+
+  void loadData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      User res = await AuthClient.find(widget.id);
+      setState(() {
+        isLoading = false;
+        usernameController.value = TextEditingValue(text: res.username);
+        emailController.value = TextEditingValue(text: res.email);
+        tanggalLahirController.value = TextEditingValue(text: res.tgl_lahir);
+        nomorTeleponController.value = TextEditingValue(text: res.no_telp);
+      });
+    } catch (err) {
+      // showSnackBar(context, err.toString(), Colors.red);
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.id != null) {
+      loadData();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Expanded(flex: 2, child: _TopPortion()),
-        Expanded(
-          flex: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Text(
-                  user!.username,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                Text(user!.email),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FloatingActionButton.extended(
-                      onPressed: () {},
-                      heroTag: 'Edit',
-                      elevation: 0,
-                      label: const Text("Edit"),
-                      icon: const Icon(Icons.edit_outlined),
-                    ),
-                    const SizedBox(width: 16.0),
-                    FloatingActionButton.extended(
-                      onPressed: () {},
-                      heroTag: 'Logout',
-                      elevation: 0,
-                      backgroundColor: Colors.red,
-                      label: const Text("Logout"),
-                      icon: const Icon(Icons.logout_outlined),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                ),
-                Center(
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Column(
+            children: [
+              const Expanded(flex: 2, child: _TopPortion()),
+              Expanded(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
+                      Text(
+                        usernameController.text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text('riel@gmail.com'),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Tanggal Lahir : ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          FloatingActionButton.extended(
+                            onPressed: () {},
+                            heroTag: 'Edit',
+                            elevation: 0,
+                            label: const Text("Edit"),
+                            icon: const Icon(Icons.edit_outlined),
                           ),
-                          Text(user!.tgl_lahir),
+                          const SizedBox(width: 16.0),
+                          FloatingActionButton.extended(
+                            onPressed: () {},
+                            heroTag: 'Logout',
+                            elevation: 0,
+                            backgroundColor: Colors.red,
+                            label: const Text("Logout"),
+                            icon: const Icon(Icons.logout_outlined),
+                          ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 8,
+                      Padding(
+                        padding: const EdgeInsets.all(8),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Nomor Telepon : ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(user!.no_telp),
-                        ],
+                      Center(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Tanggal Lahir : ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text('18 April 2023'),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Nomor Telepon : ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text('08773657978'),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+              ),
+            ],
+          );
   }
 }
 

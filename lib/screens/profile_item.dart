@@ -46,7 +46,7 @@ class _ProfileItemState extends State<ProfileItem> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ItemProfile(),
+          // child: ItemProfile(),
         )
       ],
     );
