@@ -5,18 +5,20 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage(
-      {super.key,
-      required this.title,
-      required this.id,
-      required this.tanggal_checkin,
-      required this.tanggal_checkout,
-      required this.tipe_kamar,
-      required this.harga,
-      required this.harga_dasar});
+  const InputPage({
+    super.key,
+    required this.title,
+    required this.id,
+    required this.id_user,
+    required this.tanggal_checkin,
+    required this.tanggal_checkout,
+    required this.tipe_kamar,
+    required this.harga,
+    required this.harga_dasar,
+  });
 
   final String title, tanggal_checkin, tanggal_checkout, tipe_kamar;
-  final int harga, harga_dasar;
+  final int harga, harga_dasar, id_user;
 
   final int? id;
 
@@ -32,28 +34,26 @@ class _InputPageState extends State<InputPage> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
-       Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+      Device.orientation == Orientation.portrait
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
       Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
-      
       if (widget.id != null && !updated) {
         controllerTanggalCheckin.text = widget.tanggal_checkin!;
         controllerTanggalCheckout.text = widget.tanggal_checkout!;
@@ -154,7 +154,9 @@ class _InputPageState extends State<InputPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Pemesanan(),
+                    builder: (context) => Pemesanan(
+                      id_user: widget.id_user,
+                    ),
                   ),
                 );
               },

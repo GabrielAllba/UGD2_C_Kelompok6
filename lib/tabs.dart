@@ -63,7 +63,7 @@ class _TabsScreenState extends State<TabsScreen> {
       if (_selectedPageIndex == 0) {
         activePage = const HomeScreen();
       } else if (_selectedPageIndex == 1) {
-        activePage = const Pemesanan();
+        activePage = Pemesanan(id_user: idUser!);
       } else if (_selectedPageIndex == 2) {
         activePage = Profile(
           id: idUser!,
