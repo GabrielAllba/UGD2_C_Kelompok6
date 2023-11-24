@@ -81,16 +81,6 @@ class _InputPageState extends State<InputPage> {
           tanggal_checkout: controllerTanggalCheckout.text,
         );
       });
-
-      print(pemesanan.id);
-      print(pemesanan.id_user);
-      print(pemesanan.harga_dasar);
-      print(pemesanan.tipe_kamar);
-      print(pemesanan.harga);
-      print(pemesanan.qr_code);
-      print(pemesanan.tanggal_checkin);
-      print(pemesanan.tanggal_checkout);
-      print('====================');
     }
 
     Future<void> updatePemesanan() async {

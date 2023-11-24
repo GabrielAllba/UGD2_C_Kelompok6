@@ -81,22 +81,16 @@ class _ItemProfileState extends State<ItemProfile> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => EditProfile()),
+                                  builder: (context) => EditProfile(
+                                    id: widget.id,
+                                  ),
+                                ),
                               );
                             },
                             heroTag: 'Edit',
                             elevation: 0,
                             label: const Text("Edit"),
                             icon: const Icon(Icons.edit_outlined),
-                          ),
-                          const SizedBox(width: 16.0),
-                          FloatingActionButton.extended(
-                            onPressed: () {},
-                            heroTag: 'Logout',
-                            elevation: 0,
-                            backgroundColor: Colors.red,
-                            label: const Text("Logout"),
-                            icon: const Icon(Icons.logout_outlined),
                           ),
                         ],
                       ),
