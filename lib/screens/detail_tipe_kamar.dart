@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd2_c_kelompok6/client/PemesananClient.dart';
 import 'package:ugd2_c_kelompok6/components/list_detail.dart';
+import 'package:ugd2_c_kelompok6/data/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/screens/detail_image.dart';
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
 import 'package:ugd2_c_kelompok6/screens/semua_foto.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart' as PemesananModel;
 
 class DetailTipeKamar extends StatefulWidget {
   DetailTipeKamar({
@@ -16,18 +19,23 @@ class DetailTipeKamar extends StatefulWidget {
     this.checkin,
     this.checkout,
     this.harga_dasar,
+    this.harga,
   }) : super(key: key);
 
   final TipeKamar tipeKamar;
   final String? checkin;
   final String? checkout;
   final int? harga_dasar;
+  final int? harga;
 
   @override
   State<DetailTipeKamar> createState() => _DetailTipeKamarState();
 }
 
 class _DetailTipeKamarState extends State<DetailTipeKamar> {
+
+  PemesananModel.Pemesanan pemesanan = PemesananModel.Pemesanan(tipe_kamar: '', harga_dasar: 0, harga: 0, tanggal_checkin: '', tanggal_checkout: '', qr_code: '',);
+
   int? idUser;
   String? username;
 
@@ -56,6 +64,31 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
         width: 100.w,
         height: 12.5.h,
       );
+  void updatePemesanan() {
+    print(pemesanan);
+    setState(() {
+      pemesanan = PemesananModel.Pemesanan(
+        harga: widget.harga!,
+        harga_dasar: widget.harga_dasar!,
+        qr_code: '',
+        tipe_kamar: widget.tipeKamar.nama,
+        tanggal_checkin: widget.checkin.toString(),
+        tanggal_checkout: widget.checkout.toString()
+      );
+    });
+    print('esdfsdf');
+    print(pemesanan);
+  }
+
+    Future<void> createPemesanan() async {
+        try {
+          await PemesananClient.create(pemesanan);
+          print('berhasil lewat');
+        } catch (err) {
+          Navigator.pop(context);
+          print(err);
+        }
+      }
 
         final _formKey = GlobalKey<FormState>();
         return Scaffold(
@@ -68,46 +101,46 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 250.h,
-                  child: Stack(
-                    alignment: Alignment.centerLeft,
-                    children: [
-                      Image.asset(
-                        widget.tipeKamar.thumbnail,
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        color: Colors.black.withOpacity(0.6),
-                        padding: const EdgeInsets.all(16.0),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hotel Sahid Raya Yogyakarta',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              'Top 1 Hotel di Indonesia!',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // SizedBox(
+                //   height: 100.h,
+                //   child: Stack(
+                //     alignment: Alignment.centerLeft,
+                //     children: [
+                //       Image.asset(
+                //         widget.tipeKamar.thumbnail,
+                //         width: double.infinity,
+                //         height: double.infinity,
+                //         fit: BoxFit.cover,
+                //       ),
+                //       Container(
+                //         width: double.infinity,
+                //         color: Colors.black.withOpacity(0.6),
+                //         padding: const EdgeInsets.all(16.0),
+                //         child: const Column(
+                //           mainAxisAlignment: MainAxisAlignment.end,
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             Text(
+                //               'Hotel Sahid Raya Yogyakarta',
+                //               style: TextStyle(
+                //                 fontSize: 24,
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.white,
+                //               ),
+                //             ),
+                //             Text(
+                //               'Top 1 Hotel di Indonesia!',
+                //               style: TextStyle(
+                //                 fontSize: 16,
+                //                 color: Colors.white,
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 if (widget.tipeKamar.foto.isNotEmpty)
                   CustomScrollView(
                     shrinkWrap: true,
@@ -415,12 +448,15 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                             ),
                           ),
                         ),
+
+                       
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: ElevatedButton(
                             onPressed: () async {
-                              print('asdfasdfdsfadsf');
-                              await addPemesanan();
+                              updatePemesanan();
+                              // await createPemesanan();
+                              print('berhasil create pemesanan');
                               Fluttertoast.showToast(
                                 msg: "Berhasil Pesan",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -443,6 +479,8 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                               primary: Colors.white,
                               onPrimary: Colors.blue,
                             ),
+
+
                           ),
                         ),
                       ],
@@ -458,29 +496,6 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
   Future<void> saveIdPemesanan(int id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('id_pemesanan', id);
-  }
-
-  Future<void> addPemesanan() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
-      username = pref.getString('username');
-      idUser = pref.getInt('id');
-    });
-
-    Duration difference = DateTime.parse(widget.checkout!)
-        .difference(DateTime.parse(widget.checkin!));
-    int selisih = difference.inDays;
-    int price = selisih * widget.tipeKamar.harga;
-
-    await SQLHelper.addPemesanan(
-      idUser!,
-      widget.tipeKamar.nama,
-      price,
-      widget.harga_dasar!,
-      widget.checkin!,
-      widget.checkout!,
-      generateQRData(price),
-    );
   }
 
   String generateQRData(int harga) {

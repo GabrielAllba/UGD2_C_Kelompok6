@@ -1,0 +1,48 @@
+import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart';
+
+import 'dart:convert';
+import 'package:http/http.dart';
+
+class PemesananClient {
+  static final String url = '10.0.2.2:8000';
+  static final String endpoint = '/api/pemesanan';
+
+  static Future<List<Pemesanan>> fetchAll() async {
+    try {
+      var response = await get(
+        Uri.http(url, endpoint));
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      
+      Iterable list = json.decode(response.body)['data'];
+      return list.map((e) => Pemesanan.fromJson(e)).toList();
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  static Future<Pemesanan> find(id) async {
+    try {
+      var response = await get(Uri.http(url, '$endpoint/$id'));
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      return Pemesanan.fromJson(json.decode(response.body)['data']);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+   static Future<Response> create(Pemesanan pemesanan) async {
+    try {
+      var response = await post(Uri.http(url, endpoint),
+          headers: {"Content-Type": "application/json"},
+          body: pemesanan.toRawJson());
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+}
