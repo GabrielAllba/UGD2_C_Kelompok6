@@ -221,14 +221,8 @@ class _InputPageState extends State<InputPage> {
               onPressed: () async {
                 setPemesanan();
                 await updatePemesanan();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Pemesanan(
-                      id_user: widget.id_user,
-                    ),
-                  ),
-                );
+                Navigator.pop(
+                    context); // Use Navigator.pop to go back to the previous screen
               },
             )
           ],
