@@ -56,6 +56,20 @@ class PemesananClient {
     }
   }
 
+  static Future<Response> update(Pemesanan pemesanan) async {
+    try {
+      var response = await put(Uri.http(url, '$endpoint/${pemesanan.id}'),
+          headers: {"Content-Type": "application/json"},
+          body: pemesanan.toRawJson());
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
   static Future<bool> isQRCodeExistsForUser(String harga) async {
     List<Pemesanan> pemesananData = await fetchAll();
     for (Pemesanan data in pemesananData) {

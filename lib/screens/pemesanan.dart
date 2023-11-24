@@ -165,7 +165,7 @@ class _PemesananState extends State<Pemesanan> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => InputPage(
-                                title: 'Edit Tanggal',
+                                title: 'Ubah Tanggal',
                                 id: pemesanan.id,
                                 id_user: widget.id_user,
                                 tanggal_checkin: pemesanan.tanggal_checkin,
@@ -173,6 +173,7 @@ class _PemesananState extends State<Pemesanan> {
                                 tipe_kamar: pemesanan.tipe_kamar,
                                 harga: pemesanan.harga,
                                 harga_dasar: pemesanan.harga_dasar,
+                                qr_code: pemesanan.qr_code,
                               ),
                             ),
                           );

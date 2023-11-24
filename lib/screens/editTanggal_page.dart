@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ugd2_c_kelompok6/client/PemesananClient.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
+import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart' as PemesananModel;
 
 class InputPage extends StatefulWidget {
   const InputPage({
@@ -15,9 +17,10 @@ class InputPage extends StatefulWidget {
     required this.tipe_kamar,
     required this.harga,
     required this.harga_dasar,
+    required this.qr_code,
   });
 
-  final String title, tanggal_checkin, tanggal_checkout, tipe_kamar;
+  final String title, tanggal_checkin, tanggal_checkout, tipe_kamar, qr_code;
   final int harga, harga_dasar, id_user;
 
   final int? id;
@@ -31,8 +34,74 @@ class _InputPageState extends State<InputPage> {
   TextEditingController controllerTanggalCheckin = TextEditingController();
   TextEditingController controllerTanggalCheckout = TextEditingController();
 
+  PemesananModel.Pemesanan pemesanan = PemesananModel.Pemesanan(
+    tipe_kamar: '',
+    harga_dasar: 0,
+    harga: 0,
+    tanggal_checkin: '2023-10-10',
+    tanggal_checkout: '2023-10-12',
+    qr_code: '',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    pemesanan = PemesananModel.Pemesanan(
+      tipe_kamar: widget.tipe_kamar,
+      harga_dasar: widget.harga_dasar,
+      harga: widget.harga,
+      tanggal_checkin: widget.tanggal_checkin,
+      tanggal_checkout: widget.tanggal_checkout,
+      qr_code: widget.qr_code,
+    );
+
+    print(pemesanan.tanggal_checkin);
+    print(pemesanan.tanggal_checkout);
+  }
+
   @override
   Widget build(BuildContext context) {
+    void setPemesanan() {
+      DateTime checkinDate = DateTime.parse(controllerTanggalCheckin.text);
+      DateTime checkoutDate = DateTime.parse(controllerTanggalCheckout.text);
+
+      Duration difference = checkoutDate.difference(checkinDate);
+      int numberOfDays = difference.inDays;
+
+      setState(() {
+        pemesanan = PemesananModel.Pemesanan(
+          id: widget.id,
+          id_user: widget.id_user,
+          harga_dasar: widget.harga_dasar,
+          tipe_kamar: widget.tipe_kamar,
+          harga: widget.harga_dasar * numberOfDays,
+          qr_code: generateQRData(widget.harga_dasar * numberOfDays),
+          tanggal_checkin: controllerTanggalCheckin.text,
+          tanggal_checkout: controllerTanggalCheckout.text,
+        );
+      });
+
+      print(pemesanan.id);
+      print(pemesanan.id_user);
+      print(pemesanan.harga_dasar);
+      print(pemesanan.tipe_kamar);
+      print(pemesanan.harga);
+      print(pemesanan.qr_code);
+      print(pemesanan.tanggal_checkin);
+      print(pemesanan.tanggal_checkout);
+      print('====================');
+    }
+
+    Future<void> updatePemesanan() async {
+      try {
+        await PemesananClient.update(pemesanan);
+        print('berhasil lewat');
+      } catch (err) {
+        Navigator.pop(context);
+        print(err);
+      }
+    }
+
     return ResponsiveSizer(builder: (context, orientation, screenType) {
       Device.orientation == Orientation.portrait
           ? Container(
@@ -61,7 +130,7 @@ class _InputPageState extends State<InputPage> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text("Edit Tanggal"),
+          title: const Text("Ubah Tanggal"),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -150,7 +219,8 @@ class _InputPageState extends State<InputPage> {
             ElevatedButton(
               child: const Text('Save'),
               onPressed: () async {
-                await editTanggal(widget.id!);
+                setPemesanan();
+                await updatePemesanan();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -165,23 +235,6 @@ class _InputPageState extends State<InputPage> {
         ),
       );
     });
-  }
-
-  Future<void> editTanggal(int id) async {
-    String formattedTanggalCheckin = DateFormat('yyyy-MM-dd')
-        .format(DateTime.parse(controllerTanggalCheckin.text));
-    String formattedTanggalCheckout = DateFormat('yyyy-MM-dd')
-        .format(DateTime.parse(controllerTanggalCheckout.text));
-    final harga = SQLHelper.getPemesananById(id);
-    await SQLHelper.editPemesanan(
-      id,
-      widget.tipe_kamar,
-      widget.harga,
-      widget.harga_dasar,
-      formattedTanggalCheckin,
-      formattedTanggalCheckout,
-      generateQRData(widget.harga),
-    );
   }
 
   String generateQRData(int harga) {
