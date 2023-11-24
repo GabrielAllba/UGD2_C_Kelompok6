@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/client/PemesananClient.dart';
@@ -11,6 +12,7 @@ import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ugd2_c_kelompok6/screens/generate_qr/generate_qr_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:uuid/uuid.dart';
 import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart' as PemesananModel;
 
@@ -184,8 +186,24 @@ class _PemesananState extends State<Pemesanan> {
                         color: Colors.red,
                         icon: Icons.delete,
                         onTap: () async {
-                          await deleteKamar(pemesananData[index].id!);
+                          setState(
+                            () {
+                              isLoading = true;
+                            },
+                          );
+                          await deletePemesanan(pemesananData[index].id!);
+                          setState(
+                            () {
+                              isLoading = false;
+                            },
+                          );
                           loadData();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TabsScreen(),
+                            ),
+                          );
                         },
                       )
                     ],
@@ -310,7 +328,12 @@ class _PemesananState extends State<Pemesanan> {
     });
   }
 
-  Future<void> deleteKamar(int id) async {
+  Future<void> deletePemesanan(int id) async {
+    try {
+      await PemesananClient.destroy(id);
+    } catch (err) {
+      print(err);
+    }
     refresh();
   }
 }

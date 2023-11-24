@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
 import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart' as PemesananModel;
+import 'package:ugd2_c_kelompok6/tabs.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({
@@ -221,8 +222,12 @@ class _InputPageState extends State<InputPage> {
               onPressed: () async {
                 setPemesanan();
                 await updatePemesanan();
-                Navigator.pop(
-                    context); // Use Navigator.pop to go back to the previous screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TabsScreen(),
+                  ),
+                );
               },
             )
           ],
