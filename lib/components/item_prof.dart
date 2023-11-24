@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 import 'package:ugd2_c_kelompok6/entity/User.dart';
+import 'package:ugd2_c_kelompok6/screens/editProfile.dart';
 
 class ItemProfile extends StatefulWidget {
   const ItemProfile({super.key, required this.id});
@@ -70,13 +71,19 @@ class _ItemProfileState extends State<ItemProfile> {
                             .headline6
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Text('riel@gmail.com'),
+                      Text(emailController.text),
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           FloatingActionButton.extended(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProfile()),
+                              );
+                            },
                             heroTag: 'Edit',
                             elevation: 0,
                             label: const Text("Edit"),
@@ -106,7 +113,7 @@ class _ItemProfileState extends State<ItemProfile> {
                                   'Tanggal Lahir : ',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('18 April 2023'),
+                                Text(tanggalLahirController.text),
                               ],
                             ),
                             const SizedBox(
@@ -119,7 +126,7 @@ class _ItemProfileState extends State<ItemProfile> {
                                   'Nomor Telepon : ',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('08773657978'),
+                                Text(nomorTeleponController.text),
                               ],
                             ),
                           ],
