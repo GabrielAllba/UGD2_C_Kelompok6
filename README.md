@@ -9,8 +9,8 @@
 - Rafael Billy Reznandya (210711297)
 
 ### Pembagian Tugas
-- Membuat create PDF & printing : Riel
-- Membuat image picker : Robby
-- Membuat UUID & PDF : Billy
-- Membuat resposive siezer & INTL : Jennia
-- Membuat barcode widget : Maharani
+- Membuat login, register, & show profile : Riel
+- Membuat update pemesanan : Robby
+- Membuat update profil : Billy
+- Membuat create pemesanan : Jenni
+- Membuat delete pemesanan : Maharani
