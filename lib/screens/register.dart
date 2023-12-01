@@ -273,7 +273,7 @@ class _RegisterViewState extends State<RegisterView> {
                           if (_formKey.currentState?.validate() ?? false) {
                             updateUserModel();
                             await register();
-                            // Text('Selamat, Anda berhasil registrasi!');
+                            Text('Selamat, Anda berhasil registrasi!');
                           } else {
                             _showMyDialog();
                           }

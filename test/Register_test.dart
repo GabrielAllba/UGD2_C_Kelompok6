@@ -16,7 +16,6 @@ void main() {
     expect(find.text('082123456789'), findsOneWidget);
     expect(find.text('2004-12-12'), findsOneWidget);
 
-    // Find the specific ElevatedButton you want to tap
     final registerButtonFinder =
         find.widgetWithText(ElevatedButton, 'Register');
 
@@ -24,16 +23,13 @@ void main() {
     await tester.enterText(find.byKey(ValueKey('email')), 'r@gmail.com');
     await tester.enterText(find.byKey(ValueKey('password')), 'password');
     await tester.enterText(find.byKey(ValueKey('noTelp')), '087736577867');
+    // await tester.enterText(find.byKey(ValueKey('tglLahir')), '2023-11-11');
 
-    // Tap the specific ElevatedButton
     await tester.tap(registerButtonFinder);
 
-    // Wait for the animation to complete
     await tester.pumpAndSettle();
 
-    // Await the completion of the register function
     await tester.runAsync(() async {
-      // Wait for a short duration to allow for the completion of the register function
       await Future.delayed(Duration(milliseconds: 500));
     });
   });
