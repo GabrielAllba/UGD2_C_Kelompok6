@@ -147,22 +147,22 @@ class _RegisterViewState extends State<RegisterView> {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
       Device.orientation == Orientation.portrait
           ? Container(
-              width: 100.w,
-              height: 20.5.h,
+              width: 100,
+              height: 20.5,
             )
           : Container(
-              width: 100.w,
-              height: 12.5.h,
+              width: 100,
+              height: 12.5,
             );
 
       Device.screenType == ScreenType.tablet
           ? Container(
-              width: 100.w,
-              height: 20.5.h,
+              width: 100,
+              height: 20.5,
             )
           : Container(
-              width: 100.w,
-              height: 12.5.h,
+              width: 100,
+              height: 12.5,
             );
       return Scaffold(
         body: SingleChildScrollView(
@@ -176,8 +176,9 @@ class _RegisterViewState extends State<RegisterView> {
                   SizedBox(
                     height: 96,
                   ),
-                  MyInputForm(
-                    validasi: (p0) {
+                  TextFormField(
+                    key: const ValueKey('username'),
+                    validator: (p0) {
                       if (p0 == null || p0.isEmpty) {
                         return 'Username Tidak Boleh Kosong';
                       }
@@ -187,28 +188,33 @@ class _RegisterViewState extends State<RegisterView> {
                       return null;
                     },
                     controller: usernameController,
-                    hintTxt: "Username",
-                    helperTxt: "Gabriel Alba",
-                    iconData: Icons.person,
+                    decoration: InputDecoration(
+                      hintText: "Username",
+                      labelText: "Gabriel Alba",
+                      icon: Icon(Icons.person),
+                    ),
                   ),
-                  MyInputForm(
-                    validasi: ((p0) {
+                  TextFormField(
+                    key: const ValueKey('email'),
+                    validator: ((p0) {
                       if (p0 == null || p0.isEmpty) {
                         return 'Email tidak boleh kosong';
                       }
                       if (!p0.contains('@')) {
                         return 'Email harus menggunakan @';
                       }
-
                       return null;
                     }),
                     controller: emailController,
-                    hintTxt: "Email",
-                    helperTxt: "gabriel@gmail.com",
-                    iconData: Icons.email,
+                    decoration: InputDecoration(
+                      hintText: "Email",
+                      labelText: "gabriel@gmail.com",
+                      icon: Icon(Icons.email),
+                    ),
                   ),
-                  MyInputForm(
-                    validasi: ((p0) {
+                  TextFormField(
+                    key: const ValueKey('password'),
+                    validator: ((p0) {
                       if (p0 == null || p0.isEmpty) {
                         return 'Password tidak boleh kosong';
                       }
@@ -218,37 +224,43 @@ class _RegisterViewState extends State<RegisterView> {
                       return null;
                     }),
                     controller: passwordController,
-                    hintTxt: "Password",
-                    helperTxt: "xxxxxxx",
-                    iconData: Icons.password,
-                    password: true,
-                    isPassword: true,
+                    decoration: InputDecoration(
+                      hintText: "Password",
+                      labelText: "xxxxxxx",
+                      icon: Icon(Icons.password),
+                    ),
+                    obscureText: true,
                   ),
-                  MyInputForm(
-                    validasi: ((p0) {
+                  TextFormField(
+                    key: const ValueKey('noTelp'),
+                    validator: ((p0) {
                       if (p0 == null || p0.isEmpty) {
                         return 'Nomor Telepon tidak boleh kosong';
                       }
                       return null;
                     }),
                     controller: notelpController,
-                    hintTxt: "No Telp",
-                    helperTxt: "082123456789",
-                    iconData: Icons.phone_android,
+                    decoration: InputDecoration(
+                      hintText: "No Telp",
+                      labelText: "082123456789",
+                      icon: Icon(Icons.phone_android),
+                    ),
                   ),
-                  MyInputForm(
-                    validasi: ((p0) {
+                  TextFormField(
+                    key: const ValueKey('tglLahir'),
+                    validator: ((p0) {
                       if (p0 == null || p0.isEmpty) {
                         return 'Tanggal Lahir';
                       }
                       return null;
                     }),
                     controller: dateController,
-                    hintTxt: "Tanggal Lahir",
-                    helperTxt: "2004-12-12",
+                    decoration: InputDecoration(
+                      hintText: "Tanggal Lahir",
+                      labelText: "2004-12-12",
+                      icon: Icon(Icons.date_range_outlined),
+                    ),
                     onTap: _showDatePicker,
-                    isDate: true,
-                    iconData: Icons.date_range_outlined,
                   ),
                   const SizedBox(
                     height: 16,
@@ -258,9 +270,13 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          updateUserModel();
-                          await register();
-                          print('asdfasdfasdfasdfadsfasdf');
+                          if (_formKey.currentState?.validate() ?? false) {
+                            updateUserModel();
+                            await register();
+                            // Text('Selamat, Anda berhasil registrasi!');
+                          } else {
+                            _showMyDialog();
+                          }
                         },
                         child: const Text('Register'),
                       ),
