@@ -22,11 +22,17 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
-  Future<void> getIdUser() async {
+  void getIdUser() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       idUser = pref.getInt('id')!;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getIdUser();
   }
 
   @override
@@ -57,10 +63,10 @@ class _TabsScreenState extends State<TabsScreen> {
       if (_selectedPageIndex == 0) {
         activePage = const HomeScreen();
       } else if (_selectedPageIndex == 1) {
-        activePage = const Pemesanan();
+        activePage = Pemesanan(id_user: idUser!);
       } else if (_selectedPageIndex == 2) {
         activePage = Profile(
-          id: 4,
+          id: idUser!,
         );
       }
 

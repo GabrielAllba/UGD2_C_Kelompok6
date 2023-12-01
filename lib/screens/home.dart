@@ -16,6 +16,8 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ugd2_c_kelompok6/database/search_history/sql_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -651,4 +653,16 @@ Future<int> getUserIdFromSharedPreferences() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int? userId = prefs.getInt('id');
   return userId!;
+}
+
+void showSnackBar(BuildContext context, String msg, Color bg){
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      content: Text(msg),
+      backgroundColor: bg,
+      action: SnackBarAction(
+        label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
+    ),
+  );
 }

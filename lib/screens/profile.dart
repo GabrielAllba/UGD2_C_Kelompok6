@@ -20,8 +20,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool isLoading = false;
-
   User user = User(
     username: '',
     password: '',
@@ -30,32 +28,9 @@ class _ProfileState extends State<Profile> {
     tgl_lahir: '',
   );
 
-  void loadData() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      print('adfasdfadsf');
-      print(widget.id);
-      User res = await AuthClient.find(widget.id);
-
-      setState(() {
-        isLoading = false;
-        user = res;
-      });
-    } catch (err) {
-      print(err);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-
-    if (widget.id != null) {
-      loadData();
-    }
   }
 
   @override
@@ -89,7 +64,7 @@ class _ProfileState extends State<Profile> {
               title: Text('Profile'),
             ),
             body: ItemProfile(
-              user: user,
+              id: widget.id,
             ),
           ),
         );

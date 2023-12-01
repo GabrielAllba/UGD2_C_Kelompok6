@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugd2_c_kelompok6/client/PemesananClient.dart';
 import 'package:ugd2_c_kelompok6/components/pdf/button_pdf.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart' as usersql;
@@ -10,32 +12,36 @@ import 'package:ugd2_c_kelompok6/screens/editTanggal_page.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ugd2_c_kelompok6/screens/generate_qr/generate_qr_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:uuid/uuid.dart';
+import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart' as PemesananModel;
 
 class Pemesanan extends StatefulWidget {
-  const Pemesanan({Key? key});
+  const Pemesanan({super.key, required this.id_user});
+
+  final int id_user;
 
   @override
   State<Pemesanan> createState() => _PemesananState();
 }
 
 class _PemesananState extends State<Pemesanan> {
-  List<Map<String, dynamic>> pemesananData = [];
-  int? id_user;
+  List<PemesananModel.Pemesanan> pemesananData = [];
   String id_pemesanan = const Uuid().v1();
+  bool isLoading = false;
 
   void refresh() async {
-    final data = await SQLHelper.getPemesanan();
-    setState(() {
-      pemesananData = data;
-    });
+    loadData();
   }
 
   void filterSearch(String query, int id_user) async {
-    final data = await SQLHelper.getPemesananByQuery(query, id_user);
-    setState(() {
-      pemesananData = data;
-    });
+    List<PemesananModel.Pemesanan> res =
+        await PemesananClient.findByUser(id_user);
+    setState(
+      () {
+        pemesananData = res;
+      },
+    );
     print(pemesananData);
   }
 
@@ -44,13 +50,12 @@ class _PemesananState extends State<Pemesanan> {
     super.initState();
     setIdUserFromSP();
     loadData();
+    print('adsfsdafadsfdf');
+    print(widget.id_user);
   }
 
   void setIdUserFromSP() async {
-    int id = await getUserIdFromSharedPreferences();
-
     setState(() {
-      id_user = id;
       const uuid = Uuid();
       id_pemesanan = uuid.v1();
     });
@@ -61,20 +66,23 @@ class _PemesananState extends State<Pemesanan> {
   String email = '';
   String id = '';
 
-  Future<void> loadData() async {
-    Map<String, dynamic> userDetails =
-        await getUserDetailsFromSharedPreferences();
-
-    int idUser = await getUserIdFromSharedPreferences();
-    List<Map<String, dynamic>> pemesanan =
-        await SQLHelper.getPemesananViaUser(idUser);
-
+  void loadData() async {
     setState(() {
-      pemesananData = pemesanan;
-      username = userDetails['username'] ?? '';
-      notelp = userDetails['notelp'] ?? '';
-      email = userDetails['email'] ?? '';
+      isLoading = true;
     });
+
+    try {
+      List<PemesananModel.Pemesanan> res =
+          await PemesananClient.findByUser(widget.id_user);
+      setState(
+        () {
+          isLoading = false;
+          pemesananData = res;
+        },
+      );
+    } catch (err) {
+      print(err);
+    }
   }
 
   TextEditingController searchController = new TextEditingController();
@@ -82,7 +90,6 @@ class _PemesananState extends State<Pemesanan> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, deviceType) {
-      
       Device.orientation == Orientation.portrait
           ? Container(
               width: 100.w,
@@ -131,7 +138,7 @@ class _PemesananState extends State<Pemesanan> {
                       onChanged: (e) => {
                         filterSearch(
                           searchController.text,
-                          id_user!,
+                          widget.id_user,
                         ),
                       },
                     ),
@@ -146,7 +153,7 @@ class _PemesananState extends State<Pemesanan> {
               child: ListView.builder(
                 itemCount: pemesananData.length,
                 itemBuilder: (context, index) {
-                  Map<String, dynamic> pemesanan = pemesananData[index];
+                  PemesananModel.Pemesanan pemesanan = pemesananData[index];
 
                   return Slidable(
                     actionPane: const SlidableDrawerActionPane(),
@@ -160,13 +167,15 @@ class _PemesananState extends State<Pemesanan> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => InputPage(
-                                title: 'Edit Tanggal',
-                                id: pemesanan['id'],
-                                tanggal_checkin: pemesanan['tanggal_checkin'],
-                                tanggal_checkout: pemesanan['tanggal_checkout'],
-                                tipe_kamar: pemesanan['tipe_kamar'],
-                                harga: pemesanan['harga'],
-                                harga_dasar: pemesanan['harga_dasar'],
+                                title: 'Ubah Tanggal',
+                                id: pemesanan.id,
+                                id_user: widget.id_user,
+                                tanggal_checkin: pemesanan.tanggal_checkin,
+                                tanggal_checkout: pemesanan.tanggal_checkout,
+                                tipe_kamar: pemesanan.tipe_kamar,
+                                harga: pemesanan.harga,
+                                harga_dasar: pemesanan.harga_dasar,
+                                qr_code: pemesanan.qr_code,
                               ),
                             ),
                           );
@@ -177,14 +186,30 @@ class _PemesananState extends State<Pemesanan> {
                         color: Colors.red,
                         icon: Icons.delete,
                         onTap: () async {
-                          await deleteKamar(pemesananData[index]['id']);
+                          setState(
+                            () {
+                              isLoading = true;
+                            },
+                          );
+                          await deletePemesanan(pemesananData[index].id!);
+                          setState(
+                            () {
+                              isLoading = false;
+                            },
+                          );
                           loadData();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TabsScreen(),
+                            ),
+                          );
                         },
                       )
                     ],
                     child: ListTile(
                       title: Text(
-                        pemesanan['tipe_kamar'],
+                        pemesanan.tipe_kamar,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -209,7 +234,7 @@ class _PemesananState extends State<Pemesanan> {
                                       ),
                                     ),
                                     Text(
-                                      pemesanan['tanggal_checkin'],
+                                      pemesanan.tanggal_checkin,
                                     )
                                   ],
                                 ),
@@ -225,7 +250,7 @@ class _PemesananState extends State<Pemesanan> {
                                       ),
                                     ),
                                     Text(
-                                      pemesanan['tanggal_checkout'],
+                                      pemesanan.tanggal_checkout,
                                     )
                                   ],
                                 ),
@@ -241,7 +266,7 @@ class _PemesananState extends State<Pemesanan> {
                                       ),
                                     ),
                                     Text(
-                                      'Rp. ' + pemesanan['harga'].toString(),
+                                      'Rp. ' + pemesanan.harga.toString(),
                                     )
                                   ],
                                 ),
@@ -256,7 +281,7 @@ class _PemesananState extends State<Pemesanan> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => GenerateQRPage(
-                                          qrData: pemesanan['qr_code']),
+                                          qrData: pemesanan.qr_code),
                                     ),
                                   );
                                 },
@@ -278,16 +303,15 @@ class _PemesananState extends State<Pemesanan> {
                                 width: 8,
                               ),
                               ButtonPdf(
-                                tipe: pemesanan['tipe_kamar'],
-                                checkin: pemesanan['tanggal_checkin'],
-                                checkout: pemesanan['tanggal_checkout'],
-                                harga_dasar: pemesanan['harga_dasar'],
-                                harga: pemesanan['harga'],
+                                tipe: pemesanan.tipe_kamar,
+                                checkin: pemesanan.tanggal_checkin,
+                                checkout: pemesanan.tanggal_checkout,
+                                harga_dasar: pemesanan.harga_dasar,
+                                harga: pemesanan.harga,
                                 username: username,
                                 email: email,
                                 no_telpon: notelp,
-                                id_pemesanan:
-                                    pemesanan['id_pemesanan'].toString(),
+                                id_pemesanan: pemesanan.id.toString(),
                               )
                             ],
                           ),
@@ -304,35 +328,12 @@ class _PemesananState extends State<Pemesanan> {
     });
   }
 
-  Future<int> getUserIdFromSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int? userId = prefs.getInt('id');
-    return userId!;
-  }
-
-  Future<String> getUsernameFromSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? username = prefs.getString('username');
-    return username!;
-  }
-
-  Future<void> deleteKamar(int id) async {
-    await SQLHelper.deletePemesanan(id);
+  Future<void> deletePemesanan(int id) async {
+    try {
+      await PemesananClient.destroy(id);
+    } catch (err) {
+      print(err);
+    }
     refresh();
-  }
-
-  Future<Map<String, dynamic>> getUserDetailsFromSharedPreferences() async {
-    int userId = await getUserIdFromSharedPreferences();
-    Map<String, dynamic> user = await usersql.SQLHelper.getUserById(userId);
-
-    String username = user['username'] ?? '';
-    String notelp = user['notelp'] ?? '';
-    String email = user['email'] ?? '';
-
-    return {
-      'username': username,
-      'notelp': notelp,
-      'email': email,
-    };
   }
 }
