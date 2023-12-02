@@ -5,6 +5,8 @@ import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 
 void main() {
   runApp(ProviderScope(child: const MainApp()));

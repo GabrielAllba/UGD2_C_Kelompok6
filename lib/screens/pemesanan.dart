@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,6 +129,7 @@ class _PemesananState extends State<Pemesanan> {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextFormField(
+                      key: Key('searchField'), // Add a key
                       controller: searchController,
                       decoration: const InputDecoration(
                         labelText: "Nama Hotel yang di pesan",
@@ -182,6 +182,7 @@ class _PemesananState extends State<Pemesanan> {
                         },
                       ),
                       IconSlideAction(
+                        key: Key('delete_button'), // Tambahkan kunci di sini
                         caption: 'Batalkan',
                         color: Colors.red,
                         icon: Icons.delete,
