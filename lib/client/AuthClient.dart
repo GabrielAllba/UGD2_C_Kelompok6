@@ -63,6 +63,25 @@ class AuthClient {
     }
   }
 
+// Only for testing purpose
+  Future<Response> loginTesting(String email, String password) async {
+    try {
+      final data = {
+        "email": email,
+        "password": password
+      }; // Fix the password key
+      var response = await post(
+        Uri.http(url, endpointlogin),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
   static Future<User> find(int id) async {
     try {
       var response = await get(Uri.http(url, '$endpointuser/$id'));

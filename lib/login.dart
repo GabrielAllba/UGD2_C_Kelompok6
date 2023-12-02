@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
@@ -16,7 +15,9 @@ import 'dart:convert';
 class LoginView extends StatefulWidget {
   final Map? data;
 
-  const LoginView({super.key, this.data});
+  const LoginView({super.key, this.data, this.authClient});
+
+  final AuthClient? authClient;
 
   @override
   State<LoginView> createState() => _LoginView();
@@ -55,7 +56,7 @@ class _LoginView extends State<LoginView> {
 
   Future<Response> login() async {
     try {
-      Response res = await AuthClient.login(
+      Response res = await widget.authClient!.loginTesting(
         emailController.text,
         passwordController.text,
       );
@@ -72,21 +73,21 @@ class _LoginView extends State<LoginView> {
       builder: (context, orientation, screenType) {
         Device.orientation == Orientation.portrait
             ? Container(
-                width: 100.w,
+                width: 100.0.w,
                 height: 20.5.h,
               )
             : Container(
-                width: 100.w,
+                width: 100.0.w,
                 height: 12.5.h,
               );
 
         Device.screenType == ScreenType.tablet
             ? Container(
-                width: 100.w,
+                width: 100.0.w,
                 height: 20.5.h,
               )
             : Container(
-                width: 100.w,
+                width: 100.0.w,
                 height: 12.5.h,
               );
         return Scaffold(
@@ -96,17 +97,28 @@ class _LoginView extends State<LoginView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MyInputForm(
-                    validasi: (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return "username tidak boleh kosong";
-                      }
-                      return null;
-                    },
-                    controller: emailController,
-                    hintTxt: "Email",
-                    helperTxt: "Inputkan Email yang telah didaftar",
-                    iconData: Icons.person,
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                      width: 350,
+                      child: TextFormField(
+                        key: const ValueKey('email'),
+                        controller: emailController,
+                        validator: (p0) {
+                          if (p0 == null || p0.isEmpty) {
+                            return "password kosong";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: "Email",
+                          labelText: "email",
+                          helperText: "Inputkan Email",
+                          prefixIcon: const Icon(Icons.email),
+                        ),
+                      ),
+                    ),
                   ),
                   //* Password
                   Padding(
@@ -114,6 +126,7 @@ class _LoginView extends State<LoginView> {
                     child: SizedBox(
                       width: 350,
                       child: TextFormField(
+                        key: const ValueKey('password'),
                         controller: passwordController,
                         obscureText: !isPasswordVisible,
                         validator: (p0) {
@@ -125,7 +138,7 @@ class _LoginView extends State<LoginView> {
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           hintText: "Password",
-                          labelText: "Password",
+                          labelText: "password",
                           helperText: "Inputkan Password",
                           suffixIcon: GestureDetector(
                             onTap: () {
@@ -152,11 +165,11 @@ class _LoginView extends State<LoginView> {
                           Response res = await login();
 
                           if (res.statusCode == 200) {
-                            var responseData = json.decode(res.body);
-                            Map<String, dynamic> user = responseData['user'];
-                            print(user['id']);
+                            // var responseData = json.decode(res.body);
+                            // Map<String, dynamic> user = responseData['user'];
+                            // print(user['id']);
 
-                            saveIdUser(user['id']);
+                            // saveIdUser(user['id']);
 
                             Fluttertoast.showToast(
                               msg: "Login Success",
