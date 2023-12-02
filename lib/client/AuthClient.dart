@@ -21,6 +21,8 @@ class AuthClient {
         body: user.toRawJson(),
       );
 
+      print(response.body);
+
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
       return response;
@@ -70,11 +72,10 @@ class AuthClient {
         "email": email,
         "password": password
       }; // Fix the password key
-      var response = await post(
-        Uri.http(url, endpointlogin),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(data),
-      );
+      var response = await post(Uri.http(url, endpointlogin),
+          headers: {"Accept": "application/json"}, body: data);
+
+      print(response.body);
 
       return response;
     } catch (e) {

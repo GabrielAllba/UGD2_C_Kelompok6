@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
-import 'package:ugd2_c_kelompok6/component/form_component.dart';
-import 'package:ugd2_c_kelompok6/database/user/sql_helper.dart';
-import 'package:ugd2_c_kelompok6/entity/User.dart';
 import 'package:ugd2_c_kelompok6/screens/register.dart';
 import 'package:ugd2_c_kelompok6/tabs.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'dart:convert';
 
 class LoginView extends StatefulWidget {
   final Map? data;

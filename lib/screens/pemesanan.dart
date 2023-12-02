@@ -42,6 +42,7 @@ class _PemesananState extends State<Pemesanan> {
         pemesananData = res;
       },
     );
+    print('IN');
     print(pemesananData);
   }
 
@@ -72,8 +73,7 @@ class _PemesananState extends State<Pemesanan> {
     });
 
     try {
-      List<PemesananModel.Pemesanan> res =
-          await PemesananClient.findByUser(widget.id_user);
+      List<PemesananModel.Pemesanan> res = await PemesananClient.fetchAll_T();
       setState(
         () {
           isLoading = false;

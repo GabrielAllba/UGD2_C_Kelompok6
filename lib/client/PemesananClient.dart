@@ -19,6 +19,14 @@ class PemesananClient {
     }
   }
 
+  static Future<List<Pemesanan>> fetchAll_T() async {
+    Iterable list = json.decode(
+        '[{"id": 2,            "id_user": 3,  "tipe_kamar": "Super Deluxe",    "harga_dasar": 650000,   "harga": 1300000,      "tanggal_checkin": "2023-12-26",    "tanggal_checkout": "2023-12-28",      "qr_code": "1300000"     }]');
+
+    print(list);
+    return list.map((e) => Pemesanan.fromJson(e)).toList();
+  }
+
   static Future<Pemesanan> find(id) async {
     try {
       var response = await get(Uri.http(url, '$endpoint/$id'));
@@ -34,6 +42,8 @@ class PemesananClient {
     try {
       var response = await get(Uri.http(url, '$endpoint/user/$id'));
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      print(response.body);
 
       Iterable list = json.decode(response.body)['data'];
       return list.map((e) => Pemesanan.fromJson(e)).toList();
@@ -84,6 +94,8 @@ class PemesananClient {
   static Future<Response> destroy(id) async {
     try {
       var response = await delete(Uri.http(url, '$endpoint/$id'));
+
+      print(response.body);
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
