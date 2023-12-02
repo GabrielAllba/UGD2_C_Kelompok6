@@ -154,6 +154,7 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
             TextFormField(
+              key: const ValueKey('tglCheckin'),
               controller: controllerTanggalCheckin,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
@@ -181,6 +182,7 @@ class _InputPageState extends State<InputPage> {
             ),
             const SizedBox(height: 24),
             TextFormField(
+              key: const ValueKey('tglCheckout'),
               controller: controllerTanggalCheckout,
               decoration: const InputDecoration(
                 icon: Icon(Icons.calendar_today),
