@@ -16,8 +16,6 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ugd2_c_kelompok6/database/search_history/sql_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -37,9 +35,9 @@ class HomeScreenState extends State<HomeScreen> {
   bool loading = false;
 
   // speech to text
-  SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
-  String _lastWords = '';
+  // SpeechToText _speechToText = SpeechToText();
+  // bool _speechEnabled = false;
+  // String _lastWords = '';
 
   TextEditingController checkinInput = TextEditingController();
   TextEditingController checkoutInput = TextEditingController();
@@ -49,7 +47,7 @@ class HomeScreenState extends State<HomeScreen> {
     checkinInput.text = "";
     checkoutInput.text = "";
     super.initState();
-    _initSpeech();
+   // _initSpeech();
     setIdUserFromSP();
     loadData('');
     _loadLocationFromSharedPreferences();
@@ -202,31 +200,31 @@ class HomeScreenState extends State<HomeScreen> {
 
   // speech to text
 
-  void _initSpeech() async {
-    print('adfasdfasdf');
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
+  // void _initSpeech() async {
+  //   print('adfasdfasdf');
+  //   _speechEnabled = await _speechToText.initialize();
+  //   setState(() {});
+  // }
 
-  void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {});
-  }
+  // void _startListening() async {
+  //   await _speechToText.listen(onResult: _onSpeechResult);
+  //   setState(() {});
+  // }
 
-  void _stopListening() async {
-    await _speechToText.stop();
-    setState(() {});
-  }
+  // void _stopListening() async {
+  //   await _speechToText.stop();
+  //   setState(() {});
+  // }
 
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    if (result.finalResult) {
-      setState(() {
-        _lastWords = result.recognizedWords;
-        searchController.text = _lastWords;
-        search = _lastWords;
-      });
-    }
-  }
+  // void _onSpeechResult(SpeechRecognitionResult result) {
+  //   if (result.finalResult) {
+  //     setState(() {
+  //       _lastWords = result.recognizedWords;
+  //       searchController.text = _lastWords;
+  //       search = _lastWords;
+  //     });
+  //   }
+  // }
 
   void setIdUserFromSP() async {
     int id = await getUserIdFromSharedPreferences();
@@ -341,13 +339,13 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               Container(
                 padding: EdgeInsets.only(top: 8),
-                child: Text(
-                  _speechToText.isListening
-                      ? '$_lastWords'
-                      : _speechEnabled
-                          ? 'Kamu bisa search pakai microphone'
-                          : 'Tidak bisa akses microphone',
-                ),
+                // child: Text(
+                //   _speechToText.isListening
+                //       ? '$_lastWords'
+                //       : _speechEnabled
+                //           ? 'Kamu bisa search pakai microphone'
+                //           : 'Tidak bisa akses microphone',
+                // ),
               ),
               Form(
                 child: Column(
@@ -360,6 +358,7 @@ class HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            key: const ValueKey('namaKamar'),
                             controller: searchController,
                             onTap: () => setState(() {
                               showDropdown = !showDropdown;
@@ -372,14 +371,14 @@ class HomeScreenState extends State<HomeScreen> {
                             decoration: InputDecoration(
                               labelText: "Nama Kamar",
                               prefixIcon: Icon(Icons.bed_outlined),
-                              suffixIcon: GestureDetector(
-                                onTap: _speechToText.isNotListening
-                                    ? _startListening
-                                    : _stopListening,
-                                child: Icon(_speechToText.isNotListening
-                                    ? Icons.mic_off
-                                    : Icons.mic),
-                              ),
+                              // suffixIcon: GestureDetector(
+                              //   onTap: _speechToText.isNotListening
+                              //       ? _startListening
+                              //       : _stopListening,
+                              //   child: Icon(_speechToText.isNotListening
+                              //       ? Icons.mic_off
+                              //       : Icons.mic),
+                              // ),
                             ),
                           ),
                           if (searchHistory.isNotEmpty && showDropdown)
@@ -519,6 +518,7 @@ class HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         TextField(
+                          key: const ValueKey('tglCheckin'),
                           controller: checkinInput,
                           decoration: const InputDecoration(
                             icon: Icon(Icons.calendar_today),
@@ -531,6 +531,7 @@ class HomeScreenState extends State<HomeScreen> {
                           height: 16,
                         ),
                         TextField(
+                          key: const ValueKey('tglCheckout'),
                           enabled:
                               _checkin.isEmpty || _checkin == '' ? false : true,
                           controller: checkoutInput,
