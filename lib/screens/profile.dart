@@ -62,6 +62,7 @@ class _ProfileState extends State<Profile> {
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.primary,
               title: Text('Profile'),
+              centerTitle: true,
             ),
             body: ItemProfile(
               id: widget.id,

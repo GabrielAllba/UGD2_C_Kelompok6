@@ -14,7 +14,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -22,6 +22,7 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   String _tanggal = '';
+
   User user = User(
     username: '',
     password: '',
@@ -33,22 +34,30 @@ class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController notelpController = TextEditingController();
+
   TextEditingController dateController = TextEditingController();
+
   Uint8List? imageBytes;
 
   @override
   void initState() {
     super.initState();
+
     loadImageFromAssets();
   }
 
   Future<void> loadImageFromAssets() async {
     try {
       final ByteData data = await rootBundle.load('images/robby.jpg');
+
       imageBytes = data.buffer.asUint8List();
+
       setState(() {});
     } catch (e) {
       print('Error loading image from assets: $e');
@@ -96,6 +105,60 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
+  Future<void> _showConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          title: const Text(
+            'Konfirmasi Registrasi',
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Apakah Anda yakin ingin registrasi?',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Batal',
+                style: TextStyle(fontSize: 18.0, color: Colors.red),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+
+                // Call the register function after confirmation
+
+                await register();
+              },
+              child: const Text(
+                'Ya',
+                style: TextStyle(fontSize: 18.0, color: Colors.blue),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showDatePicker() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -112,9 +175,12 @@ class _RegisterViewState extends State<RegisterView> {
 
     if (pickedDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
       setState(() {
         _tanggal = formattedDate;
+
         dateController.text = formattedDate;
+
         print('checkin');
       });
     }
@@ -135,9 +201,11 @@ class _RegisterViewState extends State<RegisterView> {
   Future<void> register() async {
     try {
       await AuthClient.register(user);
+
       print('berhasil lewat');
     } catch (err) {
       Navigator.pop(context);
+
       print(err);
     }
   }
@@ -145,25 +213,6 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, screenType) {
-      Device.orientation == Orientation.portrait
-          ? Container(
-              width: 100.w,
-              height: 20.5.h,
-            )
-          : Container(
-              width: 100.w,
-              height: 12.5.h,
-            );
-
-      Device.screenType == ScreenType.tablet
-          ? Container(
-              width: 100.w,
-              height: 20.5.h,
-            )
-          : Container(
-              width: 100.w,
-              height: 12.5.h,
-            );
       return Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(
@@ -181,9 +230,11 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Username Tidak Boleh Kosong';
                       }
+
                       if (p0.toLowerCase() == 'anjing') {
                         return 'Tidak boleh menggunakan kata kasar';
                       }
+
                       return null;
                     },
                     controller: usernameController,
@@ -196,6 +247,7 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Email tidak boleh kosong';
                       }
+
                       if (!p0.contains('@')) {
                         return 'Email harus menggunakan @';
                       }
@@ -212,9 +264,11 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Password tidak boleh kosong';
                       }
+
                       if (p0.length < 5) {
                         return 'Password minimal 5 digit';
                       }
+
                       return null;
                     }),
                     controller: passwordController,
@@ -229,6 +283,7 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Nomor Telepon tidak boleh kosong';
                       }
+
                       return null;
                     }),
                     controller: notelpController,
@@ -241,6 +296,7 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Tanggal Lahir';
                       }
+
                       return null;
                     }),
                     controller: dateController,
@@ -258,9 +314,15 @@ class _RegisterViewState extends State<RegisterView> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          updateUserModel();
-                          await register();
-                          print('asdfasdfasdfasdfadsfasdf');
+                          if (_formKey.currentState!.validate()) {
+                            updateUserModel();
+
+                            // Show the confirmation dialog before registering
+
+                            await _showConfirmationDialog();
+                          } else {
+                            _showMyDialog(); // Tampilkan dialog error jika validasi gagal
+                          }
                         },
                         child: const Text('Register'),
                       ),
@@ -270,7 +332,9 @@ class _RegisterViewState extends State<RegisterView> {
                       ElevatedButton(
                         onPressed: () async {
                           Map<String, dynamic> formData = {};
+
                           formData['username'] = usernameController.text;
+
                           formData['password'] = passwordController.text;
 
                           Navigator.push(

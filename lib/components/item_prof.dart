@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 import 'package:ugd2_c_kelompok6/entity/User.dart';
 import 'package:ugd2_c_kelompok6/screens/editProfile.dart';
+import 'package:ugd2_c_kelompok6/screens/feedback.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemProfile extends StatefulWidget {
   const ItemProfile({super.key, required this.id});
@@ -19,6 +23,10 @@ class _ItemProfileState extends State<ItemProfile> {
   final nomorTeleponController = TextEditingController();
 
   bool isLoading = false;
+  int? idUser;
+  Key imageKey = UniqueKey();
+  Uint8List? imageFile;
+  final imagePicker = ImagePicker();
 
   void loadData() async {
     setState(() {
@@ -66,62 +74,87 @@ class _ItemProfileState extends State<ItemProfile> {
                     children: [
                       Text(
                         usernameController.text,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
                       ),
-                      Text(emailController.text),
+                      Text(
+                        emailController.text,
+                        style: Theme.of(context).textTheme.headline6?.copyWith(
+                              fontSize: 16,
+                            ),
+                      ),
                       const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FloatingActionButton.extended(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditProfile(
-                                    id: widget.id,
-                                  ),
-                                ),
-                              );
-                            },
-                            heroTag: 'Edit',
-                            elevation: 0,
-                            label: const Text("Edit"),
-                            icon: const Icon(Icons.edit_outlined),
-                          ),
-                        ],
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(8),
                       ),
                       Center(
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Tanggal Lahir : ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                            Padding(
+                              padding: EdgeInsets.only(left: 25),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditProfile(id: widget.id),
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      color: Colors.black,
+                                      size: 28,
+                                    ),
+                                    SizedBox(width: 18),
+                                    Text(
+                                      'Edit Profile',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(tanggalLahirController.text),
-                              ],
+                              ),
                             ),
                             const SizedBox(
-                              height: 8,
+                              height: 18,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Nomor Telepon : ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                            Padding(
+                              padding: EdgeInsets.only(left: 25),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FeedbackPage(
+                                            id: widget.id.toString())),
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.message,
+                                      color: Colors.black,
+                                      size: 26,
+                                    ),
+                                    SizedBox(width: 18),
+                                    Text(
+                                      'Feedback',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(nomorTeleponController.text),
-                              ],
+                              ),
                             ),
                           ],
                         ),
