@@ -76,22 +76,22 @@ class _ItemProfileState extends State<ItemProfile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          FloatingActionButton.extended(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditProfile(
-                                    id: widget.id,
-                                  ),
-                                ),
-                              );
-                            },
-                            heroTag: 'Edit',
-                            elevation: 0,
-                            label: const Text("Edit"),
-                            icon: const Icon(Icons.edit_outlined),
-                          ),
+                          // FloatingActionButton.extended(
+                          //   onPressed: () {
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => EditProfile(
+                          //           id: widget.id,
+                          //         ),
+                          //       ),
+                          //     );
+                          //   },
+                          //   heroTag: 'Edit',
+                          //   elevation: 0,
+                          //   label: const Text("Edit"),
+                          //   icon: const Icon(Icons.edit_outlined),
+                          // ),
                         ],
                       ),
                       Padding(

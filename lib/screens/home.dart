@@ -16,8 +16,6 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ugd2_c_kelompok6/database/search_history/sql_helper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -247,206 +245,334 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-  return ResponsiveSizer(
-      builder: (context, orientation, screenType){
-         Device.orientation == Orientation.portrait
-        ? Container(
-        width: 100.w,
-        height: 20.5.h,
-      )
-
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
+    return ResponsiveSizer(builder: (context, orientation, screenType) {
+      Device.orientation == Orientation.portrait
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
       Device.screenType == ScreenType.tablet
-        ? Container(
-      width: 100.w,
-      height: 20.5.h,
-      )
+          ? Container(
+              width: 100.w,
+              height: 20.5.h,
+            )
+          : Container(
+              width: 100.w,
+              height: 12.5.h,
+            );
 
-      : Container(
-        width: 100.w,
-        height: 12.5.h,
-      );
-      
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 250,
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    Image.asset(
-                      'images/background.jpg',
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(235, 42, 124, 255),
-                            Color.fromARGB(235, 64, 223, 238),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      padding: const EdgeInsets.all(16.0),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hotel Sahid Raya Yogyakarta',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            'Top 1 Hotel di Indonesia!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 250,
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Image.asset(
+                    'images/background.jpg',
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(235, 42, 124, 255),
+                          Color.fromARGB(235, 64, 223, 238),
                         ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.only(left: 16, top: 16),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Lihat kamar!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hotel Sahid Raya Yogyakarta',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Top 1 Hotel di Indonesia!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Container(
-                padding: EdgeInsets.only(top: 8),
-                child: Text(
-                  _speechToText.isListening
-                      ? '$_lastWords'
-                      : _speechEnabled
-                          ? 'Kamu bisa search pakai microphone'
-                          : 'Tidak bisa akses microphone',
-                ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(left: 16, top: 16),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Lihat kamar!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Form(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: searchController,
-                            onTap: () => setState(() {
-                              showDropdown = !showDropdown;
-                              print(showDropdown);
-                            }),
-                            onChanged: (query) {
-                              search = query;
-                              loadData(search);
-                            },
-                            decoration: InputDecoration(
-                              labelText: "Nama Kamar",
-                              prefixIcon: Icon(Icons.bed_outlined),
-                              suffixIcon: GestureDetector(
-                                onTap: _speechToText.isNotListening
-                                    ? _startListening
-                                    : _stopListening,
-                                child: Icon(_speechToText.isNotListening
-                                    ? Icons.mic_off
-                                    : Icons.mic),
-                              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 8),
+              child: Text(
+                _speechToText.isListening
+                    ? '$_lastWords'
+                    : _speechEnabled
+                        ? 'Kamu bisa search pakai microphone'
+                        : 'Tidak bisa akses microphone',
+              ),
+            ),
+            Form(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: searchController,
+                          onTap: () => setState(() {
+                            showDropdown = !showDropdown;
+                            print(showDropdown);
+                          }),
+                          onChanged: (query) {
+                            search = query;
+                            loadData(search);
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Nama Kamar",
+                            prefixIcon: Icon(Icons.bed_outlined),
+                            suffixIcon: GestureDetector(
+                              onTap: _speechToText.isNotListening
+                                  ? _startListening
+                                  : _stopListening,
+                              child: Icon(_speechToText.isNotListening
+                                  ? Icons.mic_off
+                                  : Icons.mic),
                             ),
                           ),
-                          if (searchHistory.isNotEmpty && showDropdown)
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Column(
-                                children: searchHistory
-                                    .map(
-                                      (item) => ListTile(
-                                        title: Text(item['query']),
+                        ),
+                        if (searchHistory.isNotEmpty && showDropdown)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Column(
+                              children: searchHistory
+                                  .map(
+                                    (item) => ListTile(
+                                      title: Text(item['query']),
+                                      onTap: () {
+                                        setState(() {
+                                          searchController.text = item['query'];
+                                          showDropdown = false;
+                                        });
+                                      },
+                                      trailing: GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            searchController.text = item['query'];
-                                            showDropdown = false;
+                                            SQLHelper.deleteSearchHistory(
+                                                item['id']);
                                           });
+                                          loadData('');
                                         },
-                                        trailing: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              SQLHelper.deleteSearchHistory(
-                                                  item['id']);
-                                            });
-                                            loadData('');
-                                          },
-                                          child: Icon(Icons.close), // Close icon
-                                        ),
+                                        child: Icon(Icons.close), // Close icon
                                       ),
-                                    )
-                                    .toList(),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (search.isNotEmpty) {
+                              if (await SQLHelper.isSame(id_user!, search) ==
+                                  false) {
+                                SQLHelper.addSearchHistory(id_user!, search);
+                                setState(() {
+                                  loadData('');
+                                });
+                                print(searchHistory);
+                              }
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HasilCariNamaKamar(
+                                  query: searchController.text,
+                                ),
+                              ), // Navigasi ke SearchKamar
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                          ),
+                          child: const Text(
+                            "Cari",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Yuk Check In!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 24,
+                        ),
+                        if (strLatLong.isNotEmpty) Text(strAlamat),
+                        if (loading) Text('Mencari lokasi...'),
+                      ],
+                    ),
+                    onTap: () async {
+                      setState(() {
+                        loading = true;
+                        strAlamat = '';
+                      });
+
+                      Position position = await _getGeoLocationPosition();
+                      getAddressFromLongLat(position);
+
+                      setState(() {
+                        loading = false;
+                        strLatLong =
+                            '${position.latitude}, ${position.longitude}';
+                      });
+
+                      getAddressFromLongLat(position);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16, bottom: 16, left: 16),
+              child: ElevatedCard(
+                content: Container(
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: checkinInput,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.calendar_today),
+                          labelText: "Tanggal Checkin",
+                        ),
+                        readOnly: true,
+                        onTap: onTapCheckin,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      TextField(
+                        enabled:
+                            _checkin.isEmpty || _checkin == '' ? false : true,
+                        controller: checkoutInput,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.calendar_today),
+                          labelText: "Tanggal Checkout",
+                        ),
+                        readOnly: true,
+                        onTap: onTapCheckout,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: reset,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.0),
                               ),
                             ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (search.isNotEmpty) {
-                                if (await SQLHelper.isSame(id_user!, search) ==
-                                    false) {
-                                  SQLHelper.addSearchHistory(id_user!, search);
-                                  setState(() {
-                                    loadData('');
-                                  });
-                                  print(searchHistory);
-                                }
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HasilCariNamaKamar(
-                                    query: searchController.text,
-                                  ),
-                                ), // Navigasi ke SearchKamar
-                              );
-                            },
+                            child: const Text(
+                              'Reset',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          ElevatedButton(
+                            onPressed: _checkin == '' && _checkout == ''
+                                ? null
+                                : () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SearchKamar(
+                                          checkin: checkinInput.text,
+                                          checkout: checkoutInput.text,
+                                        ),
+                                      ), // Navigasi ke SearchKamar
+                                    );
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   Theme.of(context).colorScheme.primary,
@@ -455,197 +581,65 @@ class HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             child: const Text(
-                              "Cari",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                              'Cari',
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Yuk Check In!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    InkWell(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            size: 24,
-                          ),
-                          if (strLatLong.isNotEmpty) Text(strAlamat),
-                          if (loading) Text('Mencari lokasi...'),
                         ],
-                      ),
-                      onTap: () async {
-                        setState(() {
-                          loading = true;
-                          strAlamat = '';
-                        });
-
-                        Position position = await _getGeoLocationPosition();
-                        getAddressFromLongLat(position);
-
-                        setState(() {
-                          loading = false;
-                          strLatLong =
-                              '${position.latitude}, ${position.longitude}';
-                        });
-
-                        getAddressFromLongLat(position);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16, bottom: 16, left: 16),
-                child: ElevatedCard(
-                  content: Container(
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: checkinInput,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.calendar_today),
-                            labelText: "Tanggal Checkin",
-                          ),
-                          readOnly: true,
-                          onTap: onTapCheckin,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        TextField(
-                          enabled:
-                              _checkin.isEmpty || _checkin == '' ? false : true,
-                          controller: checkoutInput,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.calendar_today),
-                            labelText: "Tanggal Checkout",
-                          ),
-                          readOnly: true,
-                          onTap: onTapCheckout,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                              onPressed: reset,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0),
-                                ),
-                              ),
-                              child: const Text(
-                                'Reset',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            ElevatedButton(
-                              onPressed: _checkin == '' && _checkout == ''
-                                  ? null
-                                  : () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SearchKamar(
-                                            checkin: checkinInput.text,
-                                            checkout: checkoutInput.text,
-                                          ),
-                                        ), // Navigasi ke SearchKamar
-                                      );
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6.0),
-                                ),
-                              ),
-                              child: const Text(
-                                'Cari',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Fasilitas',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16.0),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Fasilitas',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  "Scan Your Check-in",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const BarcodeScannerPageView(),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Scan Me",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
                   ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                "Scan Your Check-in",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const BarcodeScannerPageView(),
+                  ),
+                );
+              },
+              child: Text(
+                "Scan Me",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
                 ),
               ),
-              const Fasilitas(),
-            ],
-          ),
-        );
-      }
-    );
+            ),
+            const Fasilitas(),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -655,14 +649,14 @@ Future<int> getUserIdFromSharedPreferences() async {
   return userId!;
 }
 
-void showSnackBar(BuildContext context, String msg, Color bg){
+void showSnackBar(BuildContext context, String msg, Color bg) {
   final scaffold = ScaffoldMessenger.of(context);
   scaffold.showSnackBar(
     SnackBar(
       content: Text(msg),
       backgroundColor: bg,
       action: SnackBarAction(
-        label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
+          label: 'hide', onPressed: scaffold.hideCurrentSnackBar),
     ),
   );
 }
