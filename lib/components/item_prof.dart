@@ -74,18 +74,34 @@ class _ItemProfileState extends State<ItemProfile> {
                     children: [
                       Text(
                         usernameController.text,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        emailController.text,
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              fontSize: 16,
-                            ),
-                      ),
+                      Text(emailController.text),
                       const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // FloatingActionButton.extended(
+                          //   onPressed: () {
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => EditProfile(
+                          //           id: widget.id,
+                          //         ),
+                          //       ),
+                          //     );
+                          //   },
+                          //   heroTag: 'Edit',
+                          //   elevation: 0,
+                          //   label: const Text("Edit"),
+                          //   icon: const Icon(Icons.edit_outlined),
+                          // ),
+                        ],
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8),
                       ),

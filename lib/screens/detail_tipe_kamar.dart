@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugd2_c_kelompok6/client/PemesananClient.dart';
+import 'package:ugd2_c_kelompok6/component/form_component.dart';
 import 'package:ugd2_c_kelompok6/components/list_detail.dart';
 import 'package:ugd2_c_kelompok6/data/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/database/pemesanan/sql_helper.dart';
 import 'package:ugd2_c_kelompok6/screens/detail_image.dart';
 import 'package:ugd2_c_kelompok6/models/tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/pemesanan.dart';
+import 'package:ugd2_c_kelompok6/screens/review_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/semua_foto.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugd2_c_kelompok6/entity/Pemesanan.dart' as PemesananModel;
@@ -44,6 +46,8 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
 
   int? idUser;
   String? username;
+
+  TextEditingController reviewController = TextEditingController();
 
   void getIdUser() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -415,6 +419,53 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                   ),
                 ),
               ),
+
+              SizedBox(
+                height: 24.h,
+              ),
+              SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Text(
+                    widget.tipeKamar.deskripsi,
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height: 24.h,
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                padding: const EdgeInsets.all(16),
+                child: const Text(
+                  'Review',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ReviewKamar(
+                        nama_kamar: widget.tipeKamar.nama,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Lihat Review'),
+              ),
+
+              SizedBox(
+                height: 24.h,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: SizedBox(
@@ -426,19 +477,6 @@ class _DetailTipeKamarState extends State<DetailTipeKamar> {
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 24.h,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Text(
-                  widget.tipeKamar.deskripsi,
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-              SizedBox(
-                height: 24.h,
               ),
             ],
           ),
