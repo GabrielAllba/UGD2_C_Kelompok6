@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 import 'package:ugd2_c_kelompok6/entity/User.dart';
 import 'package:ugd2_c_kelompok6/screens/editProfile.dart';
+import 'package:ugd2_c_kelompok6/screens/feedback.dart';
 
 class ItemProfile extends StatefulWidget {
   const ItemProfile({super.key, required this.id});
@@ -76,21 +77,42 @@ class _ItemProfileState extends State<ItemProfile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right:
+                                    4.0), // Adjust the right padding as needed
+                            child: FloatingActionButton.extended(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProfile(
+                                      id: widget.id,
+                                    ),
+                                  ),
+                                );
+                              },
+                              heroTag: 'Edit',
+                              elevation: 0,
+                              label: const Text("Edit"),
+                              icon: const Icon(Icons.edit_outlined),
+                            ),
+                          ),
                           FloatingActionButton.extended(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EditProfile(
-                                    id: widget.id,
+                                  builder: (context) => FeedbackPage(
+                                    id: widget.id.toString(),
                                   ),
                                 ),
                               );
                             },
-                            heroTag: 'Edit',
+                            heroTag: 'Feedback',
                             elevation: 0,
-                            label: const Text("Edit"),
-                            icon: const Icon(Icons.edit_outlined),
+                            label: const Text("Feedback"),
+                            icon: const Icon(Icons.message),
                           ),
                         ],
                       ),
