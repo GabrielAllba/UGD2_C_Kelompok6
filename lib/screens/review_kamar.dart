@@ -6,6 +6,7 @@ import 'package:ugd2_c_kelompok6/client/ReviewClient.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 
 import 'package:ugd2_c_kelompok6/entity/Review.dart' as ReviewModel;
+import 'package:ugd2_c_kelompok6/screens/detail_tipe_kamar.dart';
 import 'package:ugd2_c_kelompok6/screens/edit_review.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -129,8 +130,9 @@ class _ReviewKamarState extends State<ReviewKamar> {
                             ),
                             IconButton(
                               icon: Icon(Icons.delete),
-                              onPressed: () {
-                                deleteReview(review.id);
+                              onPressed: () async {
+                                await deleteReview(review.id);
+
                                 Alert(
                                   context: context,
                                   type: AlertType.error,
@@ -143,12 +145,13 @@ class _ReviewKamarState extends State<ReviewKamar> {
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 20),
                                       ),
-                                      onPressed: () => Navigator.pop(context),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                       width: 120,
                                     )
                                   ],
                                 ).show();
-                                fetchReviews();
                               },
                             ),
                           ],
