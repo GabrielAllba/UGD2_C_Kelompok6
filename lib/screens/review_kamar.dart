@@ -6,6 +6,8 @@ import 'package:ugd2_c_kelompok6/client/ReviewClient.dart';
 import 'package:ugd2_c_kelompok6/client/AuthClient.dart';
 
 import 'package:ugd2_c_kelompok6/entity/Review.dart' as ReviewModel;
+import 'package:ugd2_c_kelompok6/screens/edit_review.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ReviewKamar extends StatefulWidget {
   ReviewKamar({super.key, required this.nama_kamar});
@@ -40,6 +42,16 @@ class _ReviewKamarState extends State<ReviewKamar> {
     try {
       await ReviewClient.create(review);
       print('Review created successfully');
+      fetchReviews();
+    } catch (err) {
+      print('Error creating review: $err');
+    }
+  }
+
+  Future<void> deleteReview(id) async {
+    try {
+      await ReviewClient.destroy(id);
+      print('Review Deleted successfully');
       fetchReviews();
     } catch (err) {
       print('Error creating review: $err');
@@ -101,15 +113,42 @@ class _ReviewKamarState extends State<ReviewKamar> {
                             IconButton(
                               icon: Icon(Icons.edit),
                               onPressed: () {
-                                // Handle edit action
-                                print("Edit Clicked");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => EditReview(
+                                      id: review.id!,
+                                      id_user: review.id_user!,
+                                      review: review.review,
+                                      nama_kamar: review.nama_kamar,
+                                      tanggal: review.tanggal,
+                                    ),
+                                  ),
+                                );
                               },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {
-                                // Handle delete action
-                                print("Delete Clicked");
+                                deleteReview(review.id);
+                                Alert(
+                                  context: context,
+                                  type: AlertType.error,
+                                  title: "YEAY!",
+                                  desc: "Berhasil Hapus Review",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ],
+                                ).show();
+                                fetchReviews();
                               },
                             ),
                           ],
@@ -151,7 +190,7 @@ class _ReviewKamarState extends State<ReviewKamar> {
                 print('helsadfhasdf'); // Call the createReview method
                 createReview(review);
                 print('adsfasdfasdfasdfasdfs'); // Call the createReview method
-                filedata.insert(0, review);
+                // filedata.insert(0, review);
               });
               commentController.clear();
               FocusScope.of(context).unfocus();

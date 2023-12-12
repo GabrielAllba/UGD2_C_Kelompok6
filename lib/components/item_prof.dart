@@ -149,8 +149,9 @@ class _ItemProfileState extends State<ItemProfile> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FeedbackPage(
-                                            id: widget.id.toString())),
+                                      builder: (context) =>
+                                          FeedbackPage(id: widget.id),
+                                    ),
                                   );
                                 },
                                 child: Row(

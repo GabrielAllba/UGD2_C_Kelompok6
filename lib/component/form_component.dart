@@ -56,12 +56,7 @@ class _MyInputFormState extends State<MyInputForm> {
         child: TextFormField(
           controller: widget.controller,
           obscureText: !isPasswordVisible,
-          validator: (p0) {
-            if (p0 == null || p0.isEmpty) {
-              return "password kosong";
-            }
-            return null;
-          },
+          validator: (value) => widget.validasi(value),
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: "Password",

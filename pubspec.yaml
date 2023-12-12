@@ -31,7 +31,7 @@ dependencies:
     http: ^1.1.0
     flutter_riverpod: ^2.4.8
     comment_box: ^0.0.18
-
+    rflutter_alert: ^2.0.7
 
 dev_dependencies:
     flutter_lints: ^2.0.0

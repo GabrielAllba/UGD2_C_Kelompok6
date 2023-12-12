@@ -142,11 +142,25 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop();
-
-                // Call the register function after confirmation
-
                 await register();
+                Fluttertoast.showToast(
+                  msg: "Berhasli Register",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.blue,
+                  textColor: Colors.white,
+                  fontSize: 16.0,
+                );
+                await Future.delayed(
+                  Duration(seconds: 2),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const LoginView(),
+                  ),
+                );
               },
               child: const Text(
                 'Ya',
@@ -265,8 +279,8 @@ class _RegisterViewState extends State<RegisterView> {
                         return 'Password tidak boleh kosong';
                       }
 
-                      if (p0.length < 5) {
-                        return 'Password minimal 5 digit';
+                      if (p0.length < 8) {
+                        return 'Password minimal 8 digit';
                       }
 
                       return null;
@@ -283,6 +297,9 @@ class _RegisterViewState extends State<RegisterView> {
                       if (p0 == null || p0.isEmpty) {
                         return 'Nomor Telepon tidak boleh kosong';
                       }
+                      if (!p0.startsWith('08') || p0.length != 12) {
+                        return 'Nomor Telepon harus diawali dengan "08" dan 12 karakter';
+                      }
 
                       return null;
                     }),
@@ -294,7 +311,12 @@ class _RegisterViewState extends State<RegisterView> {
                   MyInputForm(
                     validasi: ((p0) {
                       if (p0 == null || p0.isEmpty) {
-                        return 'Tanggal Lahir';
+                        return 'Tanggal Lahir Tidak Boleh Kosong';
+                      }
+                      DateTime birthDate = DateTime.tryParse(p0)!;
+                      if (birthDate == null ||
+                          birthDate.isAfter(DateTime.now())) {
+                        return 'Tanggal Lahir harus sebelum tanggal sekarang';
                       }
 
                       return null;
