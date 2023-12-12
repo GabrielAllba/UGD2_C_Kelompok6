@@ -31,6 +31,20 @@ class AuthClient {
     }
   }
 
+  static Future<Response> registerTesting(User user) async {
+    try {
+      var response = await post(
+        Uri.http('127.0.0.1:8000', endpointregister),
+        headers: {"Content-Type": "application/json"},
+        body: user.toRawJson(),
+      );
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
   static Future<Response> update(User user) async {
     try {
       var response = await put(
@@ -72,10 +86,8 @@ class AuthClient {
         "email": email,
         "password": password
       }; // Fix the password key
-      var response = await post(Uri.http(url, endpointlogin),
+      var response = await post(Uri.http('127.0.0.1:8000', endpointlogin),
           headers: {"Accept": "application/json"}, body: data);
-
-      print(response.body);
 
       return response;
     } catch (e) {

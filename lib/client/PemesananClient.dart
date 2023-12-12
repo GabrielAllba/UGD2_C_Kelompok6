@@ -19,6 +19,18 @@ class PemesananClient {
     }
   }
 
+  static Future<List<Pemesanan>> fetchAllTesting() async {
+    try {
+      var response = await get(Uri.http('127.0.0.1:8000', endpoint));
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      Iterable list = json.decode(response.body)['data'];
+      return list.map((e) => Pemesanan.fromJson(e)).toList();
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
   static Future<List<Pemesanan>> fetchAll_T() async {
     Iterable list = json.decode(
         '[{"id": 2,            "id_user": 3,  "tipe_kamar": "Super Deluxe",    "harga_dasar": 650000,   "harga": 1300000,      "tanggal_checkin": "2023-12-26",    "tanggal_checkout": "2023-12-28",      "qr_code": "1300000"     }]');
@@ -66,9 +78,38 @@ class PemesananClient {
     }
   }
 
+  static Future<Response> createPemesananTesting(Pemesanan pemesanan) async {
+    try {
+      var response = await post(Uri.http('127.0.0.1:8000', endpoint),
+          headers: {"Content-Type": "application/json"},
+          body: pemesanan.toRawJson());
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
   static Future<Response> update(Pemesanan pemesanan) async {
     try {
       var response = await put(Uri.http(url, '$endpoint/${pemesanan.id}'),
+          headers: {"Content-Type": "application/json"},
+          body: pemesanan.toRawJson());
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  static Future<Response> updatePemesananTesting(Pemesanan pemesanan) async {
+    try {
+      var response = await put(
+          Uri.http('127.0.0.1:8000', '$endpoint/${pemesanan.id}'),
           headers: {"Content-Type": "application/json"},
           body: pemesanan.toRawJson());
 
@@ -96,6 +137,20 @@ class PemesananClient {
       var response = await delete(Uri.http(url, '$endpoint/$id'));
 
       print(response.body);
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  static Future<Response> destroyTesting(id) async {
+    try {
+      var response = await delete(Uri.http('127.0.0.1:8000', '$endpoint/$id'));
+
+      // print(response.body);
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
